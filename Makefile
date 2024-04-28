@@ -2,10 +2,10 @@ NAME		:= minishell
 INC			:= $(shell find includes -name "*.h" -exec dirname {} \; | sort -u | sed 's/^/-I /')
 SRCS_DIR	:= ./srcs
 SRCS		:= $(shell find srcs -name "*.c")
-LIBFT		= libft/libft.a
-LIBREADLINE	= readline/libreadline.a
-LDFLAGS := -Llibft -Lreadline
-LDLIBS := -lft -lreadline -lncurses
+LIBFT		:= libft/libft.a
+LIBREADLINE	:= readline/libreadline.a
+LDFLAGS		:= -Llibft -Lreadline
+LDLIBS		:=  -lft -lreadline -lncurses
 OBJS_DIR	:= ./objs
 OBJS		:= $(subst $(SRCS_DIR), $(OBJS_DIR), $(SRCS:.c=.o))
 DEPS		:= $(subst $(SRCS_DIR), $(OBJS_DIR), $(SRCS:.c=.d))
@@ -25,7 +25,7 @@ endif
 
 all			: $(NAME)
 
-$(NAME)	: $(OBJS) $(LIBS)
+$(NAME)	: $(OBJS) $(LIBS) $(LIBFT) $(LIBREADLINE)
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LDFLAGS) $(LDLIBS)
 
 $(LIBFT):

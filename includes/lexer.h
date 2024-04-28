@@ -12,9 +12,11 @@ typedef enum e_token_type
 {
     EMPTY,
 	STRING,
-    // |, ;
+    // |, ;, ;;, |&
 	PIPE,
 	SEMICOLON,
+    DOUBLE_SEMICOLON,
+    PIPE_AND,
     // &&, ||
     AND,
     OR,
@@ -22,6 +24,7 @@ typedef enum e_token_type
     TILDE,
     // $
     DOLLAR,
+    EXPAND_STRING,
     // (, )
     LEFT_PAREN,
     RIGHT_PAREN,
@@ -34,11 +37,12 @@ typedef enum e_token_type
     SLASH,
     PERCENT,
     DOUBLE_STAR, 
-    // {, }, #, %
+    // {, }, #, %, ..
     LEFT_BRACE,
     RIGHT_BRACE,
     SHARP,
     PERCENT,
+    DOUBLE_DOT,
     // *, ?, ??
     ASTERISK,
     QUESTION,
@@ -63,6 +67,9 @@ typedef enum e_token_type
     FILENAME,
     HEREDOC_WORD,
     HEREDOC_WORD_QUOTE,
+    // !,
+    HISTORY,
+    HISTORY_NUM,
 }	t_token_type;
 
 #endif
