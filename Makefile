@@ -1,7 +1,7 @@
 NAME		:= minishell
 INC			:= $(shell find includes -name "*.h" -exec dirname {} \; | sort -u | sed 's/^/-I /')
 SRCS_DIR	:= ./srcs
-SRCS		:= $(shell find srcs -name "*.c")
+SRCS		:= $(shell find . -name "*.c" | grep -v readline | grep -v libft | tr '\n' ' ')
 LIBFT		:= libft/libft.a
 LIBREADLINE	:= readline/libreadline.a
 LDFLAGS		:= -Llibft -Lreadline
