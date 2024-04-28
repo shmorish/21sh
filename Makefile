@@ -29,9 +29,11 @@ $(NAME)	: $(OBJS) $(LIBS)
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LDFLAGS) $(LDLIBS)
 
 $(LIBFT):
+	@git submodule update --init --recursive
 	$(MAKE) -C ./libft
 
 $(LIBREADLINE):
+	@git submodule update --init --recursive
 	cd readline && ./configure > /dev/null
 	$(MAKE) -C ./readline
 
