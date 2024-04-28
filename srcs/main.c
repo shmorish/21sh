@@ -1,6 +1,7 @@
 #include <stdio.h>
+#include <readline/readline.h>
 
 int main() {
-  printf("Hello, World!\n");
+  readline("Hello, World!");
   return 0;
 }

@@ -2,7 +2,10 @@ NAME		:= minishell
 INC			:= $(shell find includes -name "*.h" -exec dirname {} \; | sort -u | sed 's/^/-I /')
 SRCS_DIR	:= ./srcs
 SRCS		:= $(shell find srcs -name "*.c")
-LIBS		= libft/libft.a
+LIBFT		= libft/libft.a
+LIBREADLINE	= readline/libreadline.a
+LDFLAGS := -Llibft -Lreadline
+LDLIBS := -lft -lreadline -lncurses
 OBJS_DIR	:= ./objs
 OBJS		:= $(subst $(SRCS_DIR), $(OBJS_DIR), $(SRCS:.c=.o))
 DEPS		:= $(subst $(SRCS_DIR), $(OBJS_DIR), $(SRCS:.c=.d))
@@ -23,10 +26,14 @@ endif
 all			: $(NAME)
 
 $(NAME)	: $(OBJS) $(LIBS)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) -lreadline -L $(shell brew --prefix readline)/lib
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LDFLAGS) $(LDLIBS)
 
-$(LIBS):
+$(LIBFT):
 	$(MAKE) -C ./libft
+
+$(LIBREADLINE):
+	cd readline && ./configure > /dev/null
+	$(MAKE) -C ./readline
 
 $(OBJS_DIR)/%.o: srcs/%.c
 	mkdir -p $(dir $@)
@@ -34,6 +41,7 @@ $(OBJS_DIR)/%.o: srcs/%.c
 
 clean		:
 	make -C ./libft clean
+	make -C ./readline clean
 	$(RM) -r $(OBJS_DIR)
 
 fclean		: clean
