@@ -22,7 +22,7 @@ endif
 all			: $(NAME)
 
 $(NAME)	: $(OBJS)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJS)
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) -lreadline -L $(shell brew --prefix readline)/lib
 
 $(OBJS_DIR)/%.o: srcs/%.c
 	mkdir -p $(dir $@)
