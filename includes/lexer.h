@@ -67,7 +67,7 @@ typedef enum e_token_type
     FILENAME,
     HEREDOC_WORD,
     HEREDOC_WORD_QUOTE,
-    // !,
+    // !, !2
     HISTORY,
     HISTORY_NUM,
 }	t_token_type;
