@@ -50,14 +50,14 @@ typedef enum e_token_type
     // [, ]
     LEFT_BRACKET,
     RIGHT_BRACKET,
-    // number redirection
-    NUMBER_REDIR_BEFORE,
-    NUMBER_REDIR_AFTER,
     // redirection <, >, >>, <<
 	INPUT_REDIR,
 	OUTPUT_REDIR,
 	APPEND_REDIR,
 	HEREDOC,
+    // number redirection
+    NUMBER_REDIR_BEFORE,
+    NUMBER_REDIR_AFTER,
     // &, <&, >&, <>
     AMPERSAND,
     INPUT_AND,
