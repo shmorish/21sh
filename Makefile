@@ -12,7 +12,7 @@ DEPS		:= $(subst $(SRCS_DIR), $(OBJS_DIR), $(SRCS:.c=.d))
 
 CC			:= cc
 CFLAGS		:= -Wall -Wextra -Werror $(INC) -MMD -MP
-CFLAGS		+= -I $(shell brew --prefix readline)/include
+CFLAGS		+= -I readline/include -I libft/include
 
 # Debug
 ifeq ($(MAKECMDGOALS), debug)
@@ -25,7 +25,7 @@ endif
 
 all			: $(NAME)
 
-$(NAME)	: $(OBJS) $(LIBS) $(LIBFT) $(LIBREADLINE)
+$(NAME)	: $(LIBFT) $(LIBREADLINE) $(OBJS) 
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LDFLAGS) $(LDLIBS)
 
 $(LIBFT):
@@ -34,8 +34,7 @@ $(LIBFT):
 
 $(LIBREADLINE):
 	@git submodule update --init --recursive
-	cd readline && ./configure > /dev/null
-	$(MAKE) -C ./readline
+	cd readline && ./configure -q --prefix=$(PWD)/readline --enable-shared=no && $(MAKE) && $(MAKE) install
 
 $(OBJS_DIR)/%.o: srcs/%.c
 	mkdir -p $(dir $@)
