@@ -1,5 +1,5 @@
 NAME		:= minishell
-INC			:= $(shell find includes -name "*.h" -exec dirname {} \; | sort -u | sed 's/^/-I /')
+INC			:= $(shell find . -name "*.h" -exec dirname {} \; | sort -u | sed 's/^/-I /' | tr '\n' ' ')
 SRCS_DIR	:= ./srcs
 SRCS		:= $(shell find . -name "*.c" | grep -v readline | grep -v libft | tr '\n' ' ')
 LIBFT		:= libft/libft.a
@@ -55,9 +55,6 @@ re			: fclean all
 debug		: re
 
 address		: re
-
-norm		:
-	norminette srcs includes
 
 help		: Makefile
 	@echo "Usage: make [target]"
