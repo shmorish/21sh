@@ -1,9 +1,8 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include <readline.h>
 #include <history.h>
-#include <sys/syscall.h>
 #include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 int main() {
 	char *line;
