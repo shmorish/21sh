@@ -12,7 +12,6 @@ DEPS		:= $(subst $(SRCS_DIR), $(OBJS_DIR), $(SRCS:.c=.d))
 
 CC			:= cc
 CFLAGS		:= -Wall -Wextra -Werror $(INC) -MMD -MP
-CFLAGS		+= -I readline/include -I libft/include
 
 # Debug
 ifeq ($(MAKECMDGOALS), debug)
