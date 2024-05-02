@@ -1,21 +1,33 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tkuramot <tkuramot@student.42tokyo.jp>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/30 03:10:48 by tkuramot          #+#    #+#             */
+/*   Updated: 2024/04/30 03:15:30 by tkuramot         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/wait.h>
-#include <readline.h>
-#include <history.h>
+#include <readline/readline.h>
+#include <readline/history.h>
 
-pid_t get_own_pid(void)
+pid_t	get_own_pid(void)
 {
-	pid_t pid;
-	pid_t ownpid;
+	pid_t	pid;
+	pid_t	ownpid;
 
 	pid = fork();
 	ownpid = pid - 1;
 	if (pid == 0)
 		exit(0);
 	waitpid(pid, NULL, 0);
-	return ownpid;
+	return (ownpid);
 }
 
 void	exit_command_line(int exit_status)
@@ -25,16 +37,16 @@ void	exit_command_line(int exit_status)
 	exit(exit_status);
 }
 
-int main() {
-	char *line;
+int	main(void)
+{
+	char		*line;
+	const pid_t	pid = get_own_pid();
+	int			exit_status;
 
+	(void)pid;
 	rl_instream = stdin;
 	rl_outstream = stderr;
-	pid_t pid = get_own_pid();
-	printf("getpid: ours %d\n", pid);
-	printf("getpid: func %d\n", getpid());
-	int	exit_status = 0;
-
+	exit_status = 0;
 	while (1)
 	{
 		line = readline("> ");
@@ -43,5 +55,5 @@ int main() {
 		add_history(line);
 		free(line);
 	}
-	return 0;
+	return (0);
 }
