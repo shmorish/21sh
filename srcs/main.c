@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tkuramot <tkuramot@student.42tokyo.jp>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/30 03:10:48 by tkuramot          #+#    #+#             */
+/*   Updated: 2024/04/30 03:15:30 by tkuramot         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -5,12 +17,14 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-int main() {
-	char *line;
+int	main(void)
+{
+	char	*line;
+	pid_t	pid;
 
 	rl_instream = stdin;
 	rl_outstream = stderr;
-	pid_t pid = fork();
+	pid = fork();
 	if (pid == 0)
 		exit(0);
 	waitpid(pid, NULL, 0);
@@ -23,5 +37,5 @@ int main() {
 		add_history(line);
 		free(line);
 	}
-	return 0;
+	return (0);
 }
