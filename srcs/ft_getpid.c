@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: shmorish <shmorish@student.42tokyo.jp>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/30 03:10:48 by shmorish          #+#    #+#             */
+/*   Updated: 2024/04/30 03:15:30 by shmorish         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -5,9 +17,10 @@
 #include "libft.h"
 
 #ifdef __linux__
+
 static pid_t	get_number_from_line(char *line)
 {
-	int	    i;
+	int		i;
 	pid_t	number;
 
 	i = 0;
@@ -19,8 +32,8 @@ static pid_t	get_number_from_line(char *line)
 
 pid_t	ft_getpid(void)
 {
-	const int   fd = open("/proc/self/status", O_RDONLY);
-	char    	*line;
+	const int	fd = open("/proc/self/status", O_RDONLY);
+	char		*line;
 	pid_t		pid;
 
 	if (fd == -1)
