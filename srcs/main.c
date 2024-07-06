@@ -16,6 +16,7 @@
 #include <sys/wait.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include "utils.h"
 
 void	exit_command_line(int exit_status)
 {

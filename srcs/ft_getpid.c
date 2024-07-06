@@ -1,5 +1,8 @@
 #include <fcntl.h>
 #include <unistd.h>
+#include <stdlib.h>
+#include <sys/wait.h>
+#include "libft.h"
 
 #ifdef __linux__
 static pid_t	get_number_from_line(char *line)
