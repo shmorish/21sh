@@ -1,5 +1,6 @@
 NAME		:= minishell
-INC			:= $(shell find . -name "*.h" -exec dirname {} \; | sort -u | sed 's/^/-I /' | tr '\n' ' ')
+# INC			:= $(shell find . -name "*.h" -exec dirname {} \; | sort -u | sed 's/^/-I /' | tr '\n' ' ')
+INC			:= -I ./includes -I ./libft/include -I ./libft/stdio/ft-printf -I ./libft/stdio/get-next-line -I ./readline -I ./readline/examples -I ./readline/examples/rlfe -I ./readline/include/readline 
 SRCS_DIR	:= ./srcs
 SRCS		:= $(shell find . -name "*.c" | grep -v readline | grep -v libft | tr '\n' ' ')
 LIBFT		:= libft/libft.a
@@ -37,7 +38,7 @@ $(LIBREADLINE):
 
 $(OBJS_DIR)/%.o: srcs/%.c
 	mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) $(INC) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean		:
 	make -C ./libft clean
