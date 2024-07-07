@@ -1,5 +1,5 @@
 NAME		:= minishell
-INC			:= $(shell find . -name "*.h" -print0 | xargs -0 -I {} dirname {} | sort -u | sed 's/^/-I /' | tr '\n' ' ')
+INC			= $(shell find . -name "*.h" -print0 | xargs -0 -I {} dirname {} | sort -u | sed 's/^/-I /' | tr '\n' ' ')
 SRCS_DIR	:= ./srcs
 SRCS		:= $(shell find . -name "*.c" | grep -v readline | grep -v libft | tr '\n' ' ')
 LIBFT		:= libft/libft.a
