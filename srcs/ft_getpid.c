@@ -40,17 +40,14 @@ pid_t	ft_getpid(void)
 		return (-1);
 	line = get_next_line(fd);
 	if (!line)
-		return (-1);
+		return (close(fd), -1);
 	while (line && ft_strncmp(line, "Pid:", 4))
 	{
 		free(line);
 		line = get_next_line(fd);
 	}
 	if (!line)
-	{
-		close(fd);
-		return (-1);
-	}
+		return (close(fd), -1);
 	pid = get_number_from_line(line);
 	free(line);
 	if (close(fd) == -1)
