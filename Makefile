@@ -11,7 +11,7 @@ OBJS		:= $(subst $(SRCS_DIR), $(OBJS_DIR), $(SRCS:.c=.o))
 DEPS		:= $(subst $(SRCS_DIR), $(OBJS_DIR), $(SRCS:.c=.d))
 
 CC			:= cc
-CFLAGS		:= -Wall -Wextra -Werror $(INC) -MMD -MP
+CFLAGS		= -Wall -Wextra -Werror $(INC) -MMD -MP
 
 # Debug
 ifeq ($(MAKECMDGOALS), debug)
