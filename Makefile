@@ -1,5 +1,5 @@
 NAME		:= minishell
-INC			:= $(shell find . -name "*.h" -exec dirname {} \; | sort -u | sed 's/^/-I /' | tr '\n' ' ')
+INC			= $(shell find . -name "*.h" -print0 | xargs -0 -I {} dirname {} | sort -u | sed 's/^/-I /' | tr '\n' ' ')
 SRCS_DIR	:= ./srcs
 SRCS		:= $(shell find . -name "*.c" | grep -v readline | grep -v libft | tr '\n' ' ')
 LIBFT		:= libft/libft.a
@@ -11,7 +11,7 @@ OBJS		:= $(subst $(SRCS_DIR), $(OBJS_DIR), $(SRCS:.c=.o))
 DEPS		:= $(subst $(SRCS_DIR), $(OBJS_DIR), $(SRCS:.c=.d))
 
 CC			:= cc
-CFLAGS		:= -Wall -Wextra -Werror $(INC) -MMD -MP
+CFLAGS		= -Wall -Wextra -Werror $(INC) -MMD -MP
 
 # Debug
 ifeq ($(MAKECMDGOALS), debug)
@@ -37,7 +37,7 @@ $(LIBREADLINE):
 
 $(OBJS_DIR)/%.o: srcs/%.c
 	mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -o $@ -c $<
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean		:
 	make -C ./libft clean
