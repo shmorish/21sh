@@ -79,7 +79,6 @@ address		: re
 
 test: $(LIBCPPUTEST) $(LIBFT) $(LIBREADLINE) $(TEST_OBJS)
 	$(CXX) $(CFLAGS) -o test $(TEST_OBJS) $(TEST_LDFLAGS) $(TEST_LDLIBS)
-	./test
 
 help		: Makefile
 	@echo "Usage: make [target]"

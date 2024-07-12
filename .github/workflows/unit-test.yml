@@ -1,0 +1,15 @@
+name: Unit Test
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y automake autoconf libtool
+
+      - name: Build and Run Tests
+        run: make test && ./test
