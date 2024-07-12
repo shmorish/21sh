@@ -6,7 +6,7 @@
 /*   By: kura <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 19:50:42 by kura              #+#    #+#             */
-/*   Updated: 2024/07/13 01:45:12 by kura             ###   ########.fr       */
+/*   Updated: 2024/07/13 02:49:21 by kura             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,6 @@ void	lx_token_print(void *token)
 {
 	const t_token	*tok = (t_token *)token;
 
-	printf("type: %d, str: %.*s, len: %d\n",
+	printf("type: %d, str: [%.*s], len: %d\n",
 		tok->type, (int)tok->len, tok->str, (int)tok->len);
 }

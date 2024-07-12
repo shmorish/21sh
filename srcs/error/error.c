@@ -6,7 +6,7 @@
 /*   By: kura <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 20:16:58 by kura              #+#    #+#             */
-/*   Updated: 2024/07/12 20:52:59 by kura             ###   ########.fr       */
+/*   Updated: 2024/07/13 03:04:01 by kura             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,16 @@ void	fatal_error(char *fmt, ...)
 	ft_vprintf(STDERR_FILENO, fmt, &ap);
 	va_end(ap);
 	exit(1);
+}
+
+void	syntax_error(char *fmt, ...)
+{
+	va_list	ap;
+
+	ft_dprintf(STDERR_FILENO, "syntax error: ");
+	va_start(ap, fmt);
+	ft_vprintf(STDERR_FILENO, fmt, &ap);
+	va_end(ap);
 }
 
 void	*or_exit(void *ptr, char *fmt, ...)

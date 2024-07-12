@@ -6,12 +6,13 @@
 /*   By: tkuramot <tkuramot@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 16:46:52 by tkuramot          #+#    #+#             */
-/*   Updated: 2024/07/13 02:19:52 by kura             ###   ########.fr       */
+/*   Updated: 2024/07/13 03:07:54 by kura             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "error.h"
 #include "ft_dlist.h"
+#include "ft_string.h"
 #include "lexer.h"
 #include <stdio.h>
 
@@ -42,12 +43,26 @@ static bool	lx_tokenize_reserved(t_dlist **lst, char **str)
 static bool	lx_tokenize_word(t_dlist **lst, char **s)
 {
 	char	*t;
+	char	*next_quote;
+	char	quote;
 
 	t = *s;
-	if (!**s)
-		return (false);
 	while (**s && !lx_ismetachar(**s))
+	{
+		if (**s == '\'' || **s == '\"')
+		{
+			quote = **s;
+			next_quote = ft_strchr(*s + 1, quote);
+			if (!next_quote)
+			{
+				*s = t + ft_strlen(t);
+				syntax_error("unterminated quote\n");
+				return (false);
+			}
+			*s = next_quote;
+		}
 		(*s)++;
+	}
 	ft_dlstadd_back(lst,
 		or_exit(ft_dlstnew(lx_token_new(TK_WORD, t, *s - t)), ERR_MALLOC));
 	return (true);
@@ -64,9 +79,9 @@ t_dlist	*tokenize(char *s)
 	{
 		while (lx_isspace(*s))
 			s++;
-		if (lx_tokenize_reserved(&cur, &s))
+		if (*s && lx_tokenize_reserved(&cur, &s))
 			continue ;
-		if (lx_tokenize_word(&cur, &s))
+		if (*s && lx_tokenize_word(&cur, &s))
 			continue ;
 	}
 	ft_dlstadd_back(&cur,
