@@ -41,7 +41,6 @@ $(OBJS_DIR)/%.o: srcs/%.c
 
 clean		:
 	make -C ./libft clean
-	make -C ./readline clean
 	$(RM) -r $(OBJS_DIR)
 
 fclean		: clean

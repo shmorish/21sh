@@ -6,10 +6,11 @@
 /*   By: tkuramot <tkuramot@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 03:10:48 by tkuramot          #+#    #+#             */
-/*   Updated: 2024/04/30 03:15:30 by tkuramot         ###   ########.fr       */
+/*   Updated: 2024/07/13 01:23:20 by kura             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "lexer.h"
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -34,6 +35,7 @@ int	main(void)
 		line = readline("> ");
 		if (!line)
 			break ;
+		lx_debug(tokenize(line));
 		add_history(line);
 		free(line);
 	}
