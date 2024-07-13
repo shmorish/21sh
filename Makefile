@@ -1,15 +1,30 @@
 NAME		:= minishell
-INC			= $(shell find . -name "*.h" -print0 | xargs -0 -I {} dirname {} | sort -u | sed 's/^/-I /' | tr '\n' ' ')
+
+# SOURCES
 SRCS_DIR	:= ./srcs
-SRCS		:= $(shell find . -name "*.c" | grep -v readline | grep -v libft | tr '\n' ' ')
+SRCS		:= $(shell find ./srcs -name "*.c" | grep -v readline | grep -v libft | tr '\n' ' ')
+TESTS_DIR	:= ./tests
+TEST_SRCS	:= $(shell find ./tests -name "*.cpp" | tr '\n' ' ')
+
+# OBJECTS
+OBJS_DIR	:= ./objs
+OBJS			:= $(subst $(SRCS_DIR), $(OBJS_DIR), $(SRCS:.c=.o))
+TEST_OBJS	:= $(subst $(TESTS_DIR), $(OBJS_DIR)/tests, $(TEST_SRCS:.cpp=.o)) $(filter-out $(OBJS_DIR)/main.o, $(OBJS))
+DEPS			:= $(subst $(SRCS_DIR), $(OBJS_DIR), $(SRCS:.c=.d))
+
+# LIBRARIES
 LIBFT		:= libft/libft.a
 LIBREADLINE	:= readline/libreadline.a
-LDFLAGS		:= -Llibft -Lreadline
-LDLIBS		:=  -lft -lreadline -lncurses
-OBJS_DIR	:= ./objs
-OBJS		:= $(subst $(SRCS_DIR), $(OBJS_DIR), $(SRCS:.c=.o))
-DEPS		:= $(subst $(SRCS_DIR), $(OBJS_DIR), $(SRCS:.c=.d))
+LIBCPPUTEST := cpputest/lib/libCppUTest.a cpputest/lib/libCppUTestExt.a
 
+# LINKER
+INC			= -I ./includes/ -I ./libft/include -I ./readline/include -I ./cpputest/include
+LDFLAGS		:= -Llibft -Lreadline
+LDLIBS		:= -lft -lreadline -lncurses
+TEST_LDFLAGS 	:= $(LDFLAGS) -Lcpputest/lib
+TEST_LDLIBS		:= $(LDLIBS) -lCppUTest -lCppUTestExt
+
+# COMPILER
 CC			:= cc
 CFLAGS		= -Wall -Wextra -Werror $(INC) -MMD -MP
 
@@ -35,9 +50,17 @@ $(LIBREADLINE):
 	@git submodule update --init --recursive
 	cd readline && ./configure -q --prefix=$(PWD)/readline --enable-shared=no && $(MAKE) && $(MAKE) install
 
+$(LIBCPPUTEST):
+	@git submodule update --init --recursive
+	cd cpputest &&  autoreconf . -i && ./configure && $(MAKE) tdd
+
 $(OBJS_DIR)/%.o: srcs/%.c
 	mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJS_DIR)/tests/%.o: $(TESTS_DIR)/%.cpp
+	mkdir -p $(dir $@)
+	$(CXX) $(CFLAGS) -c $< -o $@
 
 clean		:
 	make -C ./libft clean
@@ -53,6 +76,9 @@ re			: fclean all
 debug		: re
 
 address		: re
+
+test: $(LIBCPPUTEST) $(LIBFT) $(LIBREADLINE) $(TEST_OBJS)
+	$(CXX) $(CFLAGS) -o test $(TEST_OBJS) $(TEST_LDFLAGS) $(TEST_LDLIBS)
 
 help		: Makefile
 	@echo "Usage: make [target]"
