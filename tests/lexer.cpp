@@ -1,5 +1,6 @@
 extern "C" {
 #include "lexer.h"
+
 #include "ft_dlist.h"
 }
 
@@ -56,67 +57,210 @@ static void EQUAL_TOKEN_LIST(t_dlist *expected, t_dlist *actual) {
  */
 TEST_GROUP(LexerTestGroup){};
 
-TEST(LexerTestGroup, SingleWord) {
+TEST(LexerTestGroup, EmptyString) {
   t_dlist *expected;
   t_dlist *actual;
 
-  actual = tokenize("hello");
-  expected = create_token_list({{TK_WORD, "hello"}, {TK_EOF, ""}});
+  actual = tokenize("");
+  expected = create_token_list({{TK_EOF, ""}});
   EQUAL_TOKEN_LIST(expected, actual);
 }
 
-TEST(LexerTestGroup, MultipleWords) {
+TEST(LexerTestGroup, SimpleCommand) {
   t_dlist *expected;
   t_dlist *actual;
 
-  actual = tokenize("   hello  \t world  \t");
+  actual = tokenize("ls -l");
   expected =
-      create_token_list({{TK_WORD, "hello"}, {TK_WORD, "world"}, {TK_EOF, ""}});
+      create_token_list({{TK_WORD, "ls"}, {TK_WORD, "-l"}, {TK_EOF, ""}});
   EQUAL_TOKEN_LIST(expected, actual);
 }
 
-TEST(LexerTestGroup, MetaCharacters) {
+TEST(LexerTestGroup, SimpleCommandWithSpaces) {
   t_dlist *expected;
   t_dlist *actual;
 
-  actual = tokenize("`$(;|||&&(){} \t");
-  expected = create_token_list({{TK_RSVD, "`"},
-                                {TK_RSVD, "$("},
-                                {TK_RSVD, ";"},
-                                {TK_RSVD, "||"},
-                                {TK_RSVD, "|"},
-                                {TK_RSVD, "&&"},
+  actual = tokenize("  ls  -l  ");
+  expected =
+      create_token_list({{TK_WORD, "ls"}, {TK_WORD, "-l"}, {TK_EOF, ""}});
+  EQUAL_TOKEN_LIST(expected, actual);
+}
+
+TEST(LexerTestGroup, SimpleCommandWithQuotes) {
+  t_dlist *expected;
+  t_dlist *actual;
+
+  actual = tokenize("ls \"-l\"");
+  expected =
+      create_token_list({{TK_WORD, "ls"}, {TK_WORD, "\"-l\""}, {TK_EOF, ""}});
+  EQUAL_TOKEN_LIST(expected, actual);
+}
+
+TEST(LexerTestGroup, SimpleCommandWithSingleQuotes) {
+  t_dlist *expected;
+  t_dlist *actual;
+
+  actual = tokenize("ls '-l'");
+  expected =
+      create_token_list({{TK_WORD, "ls"}, {TK_WORD, "'-l'"}, {TK_EOF, ""}});
+  EQUAL_TOKEN_LIST(expected, actual);
+}
+
+TEST(LexerTestGroup, Pipe) {
+  t_dlist *expected;
+  t_dlist *actual;
+
+  actual = tokenize("ls | wc");
+  expected = create_token_list(
+      {{TK_WORD, "ls"}, {TK_RSVD, "|"}, {TK_WORD, "wc"}, {TK_EOF, ""}});
+  EQUAL_TOKEN_LIST(expected, actual);
+}
+
+TEST(LexerTestGroup, RedirectionOut) {
+  t_dlist *expected;
+  t_dlist *actual;
+
+  actual = tokenize("ls > file");
+  expected = create_token_list(
+      {{TK_WORD, "ls"}, {TK_RSVD, ">"}, {TK_WORD, "file"}, {TK_EOF, ""}});
+  EQUAL_TOKEN_LIST(expected, actual);
+}
+
+TEST(LexerTestGroup, RedirectionIn) {
+  t_dlist *expected;
+  t_dlist *actual;
+
+  actual = tokenize("ls < file");
+  expected = create_token_list(
+      {{TK_WORD, "ls"}, {TK_RSVD, "<"}, {TK_WORD, "file"}, {TK_EOF, ""}});
+  EQUAL_TOKEN_LIST(expected, actual);
+}
+
+TEST(LexerTestGroup, RedirectionAppend) {
+  t_dlist *expected;
+  t_dlist *actual;
+
+  actual = tokenize("ls >> file");
+  expected = create_token_list(
+      {{TK_WORD, "ls"}, {TK_RSVD, ">>"}, {TK_WORD, "file"}, {TK_EOF, ""}});
+  EQUAL_TOKEN_LIST(expected, actual);
+}
+
+TEST(LexerTestGroup, Heredoc) {
+  t_dlist *expected;
+  t_dlist *actual;
+
+  actual = tokenize("ls << EOF");
+  expected = create_token_list(
+      {{TK_WORD, "ls"}, {TK_RSVD, "<<"}, {TK_WORD, "EOF"}, {TK_EOF, ""}});
+  EQUAL_TOKEN_LIST(expected, actual);
+}
+
+TEST(LexerTestGroup, Subshell) {
+  t_dlist *expected;
+  t_dlist *actual;
+
+  actual = tokenize("ls (echo hello)");
+  expected = create_token_list({{TK_WORD, "ls"},
                                 {TK_RSVD, "("},
+                                {TK_WORD, "echo"},
+                                {TK_WORD, "hello"},
                                 {TK_RSVD, ")"},
-                                {TK_RSVD, "{"},
+                                {TK_EOF, ""}});
+  EQUAL_TOKEN_LIST(expected, actual);
+}
+
+TEST(LexerTestGroup, CommandSubstitution) {
+  t_dlist *expected;
+  t_dlist *actual;
+
+  actual = tokenize("ls $(echo hello)");
+  expected = create_token_list({{TK_WORD, "ls"},
+                                {TK_RSVD, "$("},
+                                {TK_WORD, "echo"},
+                                {TK_WORD, "hello"},
+                                {TK_RSVD, ")"},
+                                {TK_EOF, ""}});
+  EQUAL_TOKEN_LIST(expected, actual);
+}
+
+TEST(LexerTestGroup, CommandSubstitutionWithBackticks) {
+  t_dlist *expected;
+  t_dlist *actual;
+
+  actual = tokenize("ls `echo hello`");
+  expected = create_token_list({{TK_WORD, "ls"},
+                                {TK_RSVD, "`"},
+                                {TK_WORD, "echo"},
+                                {TK_WORD, "hello"},
+                                {TK_RSVD, "`"},
+                                {TK_EOF, ""}});
+  EQUAL_TOKEN_LIST(expected, actual);
+}
+
+TEST(LexerTestGroup, CompoundCommand) {
+  t_dlist *expected;
+  t_dlist *actual;
+
+  actual = tokenize("{ ls; wc; }");
+  expected = create_token_list({{TK_RSVD, "{"},
+                                {TK_WORD, "ls"},
+                                {TK_RSVD, ";"},
+                                {TK_WORD, "wc"},
+                                {TK_RSVD, ";"},
                                 {TK_RSVD, "}"},
                                 {TK_EOF, ""}});
   EQUAL_TOKEN_LIST(expected, actual);
 }
 
-TEST(LexerTestGroup, SingleQuotedString) {
+TEST(LexerTestGroup, And) {
   t_dlist *expected;
   t_dlist *actual;
 
-  actual = tokenize("'hello'");
-  expected = create_token_list({{TK_WORD, "'hello'"}, {TK_EOF, ""}});
+  actual = tokenize("ls && wc");
+  expected = create_token_list(
+      {{TK_WORD, "ls"}, {TK_RSVD, "&&"}, {TK_WORD, "wc"}, {TK_EOF, ""}});
   EQUAL_TOKEN_LIST(expected, actual);
 }
 
-TEST(LexerTestGroup, DoubleQuotedString) {
+TEST(LexerTestGroup, Or) {
   t_dlist *expected;
   t_dlist *actual;
 
-  actual = tokenize("\"hello\"");
-  expected = create_token_list({{TK_WORD, "\"hello\""}, {TK_EOF, ""}});
+  actual = tokenize("ls || wc");
+  expected = create_token_list(
+      {{TK_WORD, "ls"}, {TK_RSVD, "||"}, {TK_WORD, "wc"}, {TK_EOF, ""}});
   EQUAL_TOKEN_LIST(expected, actual);
 }
 
-TEST(LexerTestGroup, MixedQuotedString) {
+TEST(LexerTestGroup, Semicolon) {
   t_dlist *expected;
   t_dlist *actual;
 
-  actual = tokenize("'hello\"world'");
-  expected = create_token_list({{TK_WORD, "'hello\"world'"}, {TK_EOF, ""}});
+  actual = tokenize("ls; wc");
+  expected = create_token_list(
+      {{TK_WORD, "ls"}, {TK_RSVD, ";"}, {TK_WORD, "wc"}, {TK_EOF, ""}});
+  EQUAL_TOKEN_LIST(expected, actual);
+}
+
+TEST(LexerTestGroup, ComplexCommand) {
+  t_dlist *expected;
+  t_dlist *actual;
+
+  actual = tokenize("ls -l | wc > file && echo hello || cat < file");
+  expected = create_token_list({{TK_WORD, "ls"},
+                                {TK_WORD, "-l"},
+                                {TK_RSVD, "|"},
+                                {TK_WORD, "wc"},
+                                {TK_RSVD, ">"},
+                                {TK_WORD, "file"},
+                                {TK_RSVD, "&&"},
+                                {TK_WORD, "echo"},
+                                {TK_WORD, "hello"},
+                                {TK_RSVD, "||"},
+                                {TK_WORD, "cat"},
+                                {TK_RSVD, "<"},
+                                {TK_WORD, "file"},
+                                {TK_EOF, ""}});
   EQUAL_TOKEN_LIST(expected, actual);
 }
