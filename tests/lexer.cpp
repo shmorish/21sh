@@ -1,4 +1,7 @@
+extern "C" {
 #include "lexer.h"
+#include "ft_dlist.h"
+}
 
 #include <format>
 #include <string>
@@ -6,7 +9,6 @@
 
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/UtestMacros.h"
-#include "ft_dlist.h"
 
 /*
  * Helper functions
