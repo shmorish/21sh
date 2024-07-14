@@ -6,24 +6,31 @@
 /*   By: tkuramot <tkuramot@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 03:10:48 by tkuramot          #+#    #+#             */
-/*   Updated: 2024/07/13 03:22:11 by kura             ###   ########.fr       */
+/*   Updated: 2024/07/15 02:11:08 by kura             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "executor.h"
 #include "lexer.h"
-#include <unistd.h>
+#include "utils.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/wait.h>
-#include <readline/readline.h>
+#include <unistd.h>
 #include <readline/history.h>
-#include "utils.h"
+#include <readline/readline.h>
 
 void	exit_command_line(int exit_status)
 {
 	if (isatty(STDIN_FILENO))
 		write(STDERR_FILENO, "exit\n", 6);
 	exit(exit_status);
+}
+
+void	cleanup(char *line)
+{
+	lx_token_list_free();
+	free(line);
 }
 
 int	main(void)
@@ -39,9 +46,14 @@ int	main(void)
 		line = readline("> ");
 		if (!line)
 			break ;
-		lx_debug(tokenize(line));
 		add_history(line);
-		free(line);
+		set_token_list(tokenize(line));
+		if (get_exit_status() != 0)
+		{
+			cleanup(line);
+			continue ;
+		}
+		lx_debug(get_token_list());
 	}
 	return (0);
 }
