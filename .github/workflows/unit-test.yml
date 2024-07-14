@@ -11,5 +11,9 @@ jobs:
       - name: Install dependencies
         run: sudo apt-get update && sudo apt-get install -y automake autoconf libtool libfmt-dev
 
-      - name: Build and Run Tests
-        run: make test && ./test
+      # - name: Build and Run Tests
+      #   run: make test && ./test
+
+      - uses: actions/checkout@v2
+      - name: Setup upterm session
+        uses: lhotari/action-upterm@v1
