@@ -9,11 +9,10 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Install dependencies
-        run: sudo apt-get update && sudo apt-get install -y automake autoconf libtool libfmt-dev
+        run: |
+          sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+          sudo apt-get update
+          sudo apt-get install -y gcc-13 g++-13 automake autoconf libtool libfmt-dev
 
-      # - name: Build and Run Tests
-      #   run: make test && ./test
-
-      - uses: actions/checkout@v2
-      - name: Setup upterm session
-        uses: lhotari/action-upterm@v1
+      - name: Build and Run Tests
+        run: make test CC=gcc-13 CXX=g++-13 && ./test
