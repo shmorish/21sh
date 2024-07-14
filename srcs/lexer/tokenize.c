@@ -6,7 +6,7 @@
 /*   By: tkuramot <tkuramot@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 16:46:52 by tkuramot          #+#    #+#             */
-/*   Updated: 2024/07/14 18:50:40 by kura             ###   ########.fr       */
+/*   Updated: 2024/07/14 20:48:05 by kura             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ static bool	lx_tokenize_reserved(t_dlist **lst, const char **str)
 {
 	const char	*s = *str;
 	if (lx_startswith(s, "<<") || lx_startswith(s, ">>")
-		|| lx_startswith(s, "&&") || lx_startswith(s, "||"))
+		|| lx_startswith(s, "&&") || lx_startswith(s, "||")
+ 		|| lx_startswith(s, "$("))
 	{
 		ft_dlstadd_back(lst,
 			or_exit(ft_dlstnew(lx_token_new(TK_RSVD, s, 2)), ERR_MALLOC));
@@ -28,7 +29,7 @@ static bool	lx_tokenize_reserved(t_dlist **lst, const char **str)
 		return (true);
 	}
 	if (*s == '|' || *s == ';' || *s == '(' || *s == ')'
-		|| *s == '{' || *s == '}' || *s == '<' || *s == '>')
+		|| *s == '{' || *s == '}' || *s == '<' || *s == '>' || *s == '`')
 	{
 		ft_dlstadd_back(lst,
 			or_exit(ft_dlstnew(lx_token_new(TK_RSVD, s, 1)), ERR_MALLOC));

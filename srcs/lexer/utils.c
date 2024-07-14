@@ -6,7 +6,7 @@
 /*   By: kura <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 19:41:04 by kura              #+#    #+#             */
-/*   Updated: 2024/07/14 17:51:00 by kura             ###   ########.fr       */
+/*   Updated: 2024/07/14 20:57:20 by kura             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ bool	lx_isspace(char c)
 // look for man bash "DEFINITIONS"
 bool	lx_ismetachar(char c)
 {
-	return (ft_strchr("|&;()<> \t", c) != NULL);
+	return (ft_strchr("`|;()<> \t", c) != NULL);
 }
 
 bool	lx_startswith(const char *s, char *prefix)
