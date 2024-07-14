@@ -6,7 +6,7 @@
 /*   By: tkuramot <tkuramot@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 03:15:51 by tkuramot          #+#    #+#             */
-/*   Updated: 2024/07/14 21:29:49 by kura             ###   ########.fr       */
+/*   Updated: 2024/07/15 01:27:33 by kura             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,10 @@ void				lx_debug(t_dlist *lst);
 t_token				*lx_token_new(t_token_type type, const char *str,
 						size_t len);
 void				lx_token_print(void *token);
+
+// token_list
+void				set_token_list(t_dlist *token_list);
+t_dlist				*get_token_list(void);
 
 // utils
 bool				lx_isspace(char c);
