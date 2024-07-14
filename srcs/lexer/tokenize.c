@@ -6,7 +6,7 @@
 /*   By: tkuramot <tkuramot@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 16:46:52 by tkuramot          #+#    #+#             */
-/*   Updated: 2024/07/13 03:07:54 by kura             ###   ########.fr       */
+/*   Updated: 2024/07/14 18:50:40 by kura             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,9 @@
 #include "lexer.h"
 #include <stdio.h>
 
-static bool	lx_tokenize_reserved(t_dlist **lst, char **str)
+static bool	lx_tokenize_reserved(t_dlist **lst, const char **str)
 {
-	char	*s;
-
-	s = *str;
+	const char	*s = *str;
 	if (lx_startswith(s, "<<") || lx_startswith(s, ">>")
 		|| lx_startswith(s, "&&") || lx_startswith(s, "||"))
 	{
@@ -40,13 +38,12 @@ static bool	lx_tokenize_reserved(t_dlist **lst, char **str)
 	return (false);
 }
 
-static bool	lx_tokenize_word(t_dlist **lst, char **s)
+static bool	lx_tokenize_word(t_dlist **lst, const char **s)
 {
-	char	*t;
+	const char	*t = *s;
 	char	*next_quote;
 	char	quote;
 
-	t = *s;
 	while (**s && !lx_ismetachar(**s))
 	{
 		if (**s == '\'' || **s == '\"')
@@ -68,7 +65,7 @@ static bool	lx_tokenize_word(t_dlist **lst, char **s)
 	return (true);
 }
 
-t_dlist	*tokenize(char *s)
+t_dlist	*tokenize(const char *s)
 {
 	t_dlist	head;
 	t_dlist	*cur;

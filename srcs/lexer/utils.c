@@ -6,7 +6,7 @@
 /*   By: kura <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 19:41:04 by kura              #+#    #+#             */
-/*   Updated: 2024/07/12 20:00:32 by kura             ###   ########.fr       */
+/*   Updated: 2024/07/14 17:51:00 by kura             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ bool	lx_ismetachar(char c)
 	return (ft_strchr("|&;()<> \t", c) != NULL);
 }
 
-bool	lx_startswith(char *s, char *prefix)
+bool	lx_startswith(const char *s, char *prefix)
 {
 	return (ft_strncmp(s, prefix, ft_strlen(prefix)) == 0);
 }
