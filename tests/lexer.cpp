@@ -184,6 +184,19 @@ TEST(LexerTestGroup, CommandSubstitution) {
   EQUAL_TOKEN_LIST(expected, actual);
 }
 
+TEST(LexerTestGroup, CommandSubstitutionWithConsecutiveDollars) {
+  t_dlist *expected;
+  t_dlist *actual;
+
+  actual = tokenize("echo $$$()");
+  expected = create_token_list({{TK_WORD, "echo"},
+                                {TK_WORD, "$$"},
+                                {TK_RSVD, "$("},
+                                {TK_RSVD, ")"},
+                                {TK_EOF, ""}});
+  EQUAL_TOKEN_LIST(expected, actual);
+}
+
 TEST(LexerTestGroup, CommandSubstitutionWithBackticks) {
   t_dlist *expected;
   t_dlist *actual;

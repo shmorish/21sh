@@ -6,7 +6,7 @@
 /*   By: tkuramot <tkuramot@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 16:46:52 by tkuramot          #+#    #+#             */
-/*   Updated: 2024/07/14 21:32:51 by kura             ###   ########.fr       */
+/*   Updated: 2024/07/15 20:55:02 by kura             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,8 @@ static bool	lx_tokenize_word(t_dlist **lst, const char **s)
 	char		*next_quote;
 	char		quote;
 
-	while (**s && !lx_ismetachar(**s))
+	while (**s && !lx_ismetachar(**s)
+		&& !lx_startswith(*s, "$("))
 	{
 		if (**s == '\'' || **s == '\"')
 		{
