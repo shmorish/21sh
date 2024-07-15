@@ -6,7 +6,7 @@
 /*   By: tkuramot <tkuramot@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 03:10:48 by tkuramot          #+#    #+#             */
-/*   Updated: 2024/07/15 02:11:08 by kura             ###   ########.fr       */
+/*   Updated: 2024/07/15 20:59:03 by kura             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	main(void)
 	{
 		line = readline("> ");
 		if (!line)
-			break ;
+			exit_command_line(get_exit_status());
 		add_history(line);
 		set_token_list(tokenize(line));
 		if (get_exit_status() != 0)
