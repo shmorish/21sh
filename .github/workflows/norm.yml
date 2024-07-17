@@ -1,4 +1,9 @@
-on: [push, pull_request]
+name: Norminette
+
+on:
+  push:
+  pull_request:
+    types: [opened, synchronize, reopened]
 
 jobs:
   norminette_job:
