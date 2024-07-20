@@ -28,6 +28,9 @@ TEST_LDLIBS		:= $(LDLIBS) -lCppUTest -lCppUTestExt
 CC			:= cc
 CFLAGS		= -Wall -Wextra -Werror $(INC) -MMD -MP
 
+CXX			:= c++
+CXXFLAGS	= -Wall -Wextra -Werror $(INC) -MMD -MP -std=c++2b
+
 # Debug
 ifeq ($(MAKECMDGOALS), debug)
 	CFLAGS += -DDEBUG
@@ -60,11 +63,10 @@ $(OBJS_DIR)/%.o: srcs/%.c
 
 $(OBJS_DIR)/tests/%.o: $(TESTS_DIR)/%.cpp
 	mkdir -p $(dir $@)
-	$(CXX) $(CFLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean		:
 	make -C ./libft clean
-	make -C ./readline clean
 	$(RM) -r $(OBJS_DIR)
 
 fclean		: clean
@@ -78,7 +80,7 @@ debug		: re
 address		: re
 
 test: $(LIBCPPUTEST) $(LIBFT) $(LIBREADLINE) $(TEST_OBJS)
-	$(CXX) $(CFLAGS) -o test $(TEST_OBJS) $(TEST_LDFLAGS) $(TEST_LDLIBS)
+	$(CXX) $(CXXFLAGS) -o test $(TEST_OBJS) $(TEST_LDFLAGS) $(TEST_LDLIBS)
 
 help		: Makefile
 	@echo "Usage: make [target]"
