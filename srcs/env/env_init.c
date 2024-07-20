@@ -48,6 +48,23 @@ static char	*split_env_to_value(char *envp)
 	return (value);
 }
 
+static t_env	*add_prompt_env(t_env *head)
+{
+	t_env	*new_env;
+	char	*key;
+	char	*value;
+
+	key = ft_strdup("PS1");
+	value = ft_strdup("minishell$ ");
+	new_env = create_env(key, value, true);
+	head = add_env_value(head, new_env);
+	key = ft_strdup("PS2");
+	value = ft_strdup("> ");
+	new_env = create_env(key, value, true);
+	head = add_env_value(head, new_env);
+	return (head);
+}
+
 t_env	*env_init(char **envp)
 {
 	t_env	*head;
@@ -69,10 +86,7 @@ t_env	*env_init(char **envp)
 			i++;
 		}
 	}
-	head = add_env_value(head, create_env(ft_strdup("PS1"),
-				ft_strdup("minishell$ "), true));
-	head = add_env_value(head, create_env(ft_strdup("PS2"),
-				ft_strdup("> "), true));
+	head = add_prompt_env(head);
 	return (head);
 }
 
