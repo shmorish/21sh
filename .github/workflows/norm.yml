@@ -1,12 +1,21 @@
-# .github/workflows/main.yml
-on: [push, pull_request]
+name: Norminette
+
+on:
+  push:
+  pull_request:
+    types: [opened, synchronize, reopened]
 
 jobs:
   norminette_job:
     runs-on: ubuntu-latest
     name: norminette
     steps:
-    - uses: actions/checkout@v2
-    - uses: alexandregv/norminette-action@v3
+    - name: checkout repository
+      uses: actions/checkout@v2
+    - name: checkout submodule
+      run: git submodule update --init libft
+    - name: norminette
+      uses: alexandregv/norminette-action@v3
       with:
         flags: 'srcs includes libft'
+
