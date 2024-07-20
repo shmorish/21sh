@@ -42,6 +42,7 @@ int	main(int argc, char **argv, char **envp)
 	env = env_init(envp);
 	while (1)
 	{
+		ft_dprintf(STDERR_FILENO, "\033[0m");
 		line = readline(get_env_value(env, "PS1"));
 		if (!line)
 			exit_command_line(exit_status);
