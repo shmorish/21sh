@@ -27,7 +27,7 @@ void	print_env(t_env *head)
 	}
 }
 
-void static	sort_env(t_env *head)
+static void	sort_env(t_env *head)
 {
 	t_env	*current_1;
 	t_env	*current_2;
