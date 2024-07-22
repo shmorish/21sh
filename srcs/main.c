@@ -6,14 +6,18 @@
 /*   By: tkuramot <tkuramot@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 03:10:48 by tkuramot          #+#    #+#             */
-/*   Updated: 2024/04/30 03:15:30 by tkuramot         ###   ########.fr       */
+/*   Updated: 2024/07/15 20:59:03 by kura             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
+#include "executor.h"
+#include "lexer.h"
+#include "utils.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/wait.h>
+#include <unistd.h>
+#include <readline/history.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "env.h"
@@ -26,28 +30,36 @@ void	exit_command_line(int exit_status)
 	exit(exit_status);
 }
 
+void	cleanup(char *line)
+{
+	lx_token_list_free();
+	free(line);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	char		*line;
 	const pid_t	pid = ft_getpid();
-	int			exit_status;
 	t_env		*env;
 
-	(void)pid;
-	(void)argc;
-	(void)argv;
+	(void)argc, (void)argv;
 	rl_instream = stdin;
 	rl_outstream = stderr;
-	exit_status = 0;
-	env = env_init(envp);
+	env = env_init(envp, pid);
 	while (1)
 	{
 		ft_dprintf(STDERR_FILENO, "\033[0m");
 		line = readline(get_env_value(env, "PS1"));
 		if (!line)
-			exit_command_line(exit_status);
+			exit_command_line(get_exit_status());
 		add_history(line);
-		free(line);
+		set_token_list(tokenize(line));
+		if (get_exit_status() != 0)
+		{
+			cleanup(line);
+			continue ;
+		}
+		lx_debug(get_token_list());
 	}
 	free_all_env(env);
 	return (0);

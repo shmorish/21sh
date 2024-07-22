@@ -30,7 +30,7 @@ typedef struct s_env
 	int		num;
 }	t_env;
 
-t_env	*env_init(char **envp);
+t_env	*env_init(char **envp, const pid_t pid);
 
 char	*get_env_value(t_env *head, char *key);
 bool	get_env_hidden(t_env *head, char *key);

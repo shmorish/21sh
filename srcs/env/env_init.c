@@ -48,7 +48,7 @@ static char	*split_env_to_value(char *envp)
 	return (value);
 }
 
-static t_env	*add_prompt_env(t_env *head)
+static t_env	*add_prompt_env(t_env *head, const pid_t pid)
 {
 	t_env	*new_env;
 	char	*key;
@@ -62,10 +62,18 @@ static t_env	*add_prompt_env(t_env *head)
 	value = ft_strdup("> ");
 	new_env = create_env(key, value, true);
 	head = add_env_value(head, new_env);
+	key = ft_strdup("$");
+	value = ft_itoa(pid);
+	new_env = create_env(key, value, true);
+	head = add_env_value(head, new_env);
+	key = ft_strdup("0");
+	value = ft_strdup("minishell");
+	new_env = create_env(key, value, true);
+	head = add_env_value(head, new_env);
 	return (head);
 }
 
-t_env	*env_init(char **envp)
+t_env	*env_init(char **envp, const pid_t pid)
 {
 	t_env	*head;
 	t_env	*new_env;
@@ -86,7 +94,7 @@ t_env	*env_init(char **envp)
 			i++;
 		}
 	}
-	head = add_prompt_env(head);
+	head = add_prompt_env(head, pid);
 	return (head);
 }
 
