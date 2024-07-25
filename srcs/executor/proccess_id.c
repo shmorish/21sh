@@ -1,21 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.h                                            :+:      :+:    :+:   */
+/*   proccess_id.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: shmorish <shmorish@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/30 03:15:51 by shmorish          #+#    #+#             */
-/*   Updated: 2024/05/02 00:17:34 by shmorish         ###   ########.fr       */
+/*   Created: 2024/04/30 03:10:48 by shmorish          #+#    #+#             */
+/*   Updated: 2024/04/30 03:15:30 by shmorish         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef UTILS_H
-# define UTILS_H
+#include <unistd.h>
+#include <stdbool.h>
 
-# include <unistd.h>
+static pid_t	proccess_id_helper(pid_t pid, bool set)
+{
+	static pid_t	proccess_id = 0;
 
-pid_t	ft_getpid(void);
-void	*malloc_wrapper(void *ret);
+	if (set)
+		proccess_id = pid;
+	return (proccess_id);
+}
 
-#endif
+void	set_proccess_id(pid_t pid)
+{
+	proccess_id_helper(pid, true);
+}
+
+pid_t	get_proccess_id(void)
+{
+	return (proccess_id_helper(0, false));
+}

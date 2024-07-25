@@ -1,21 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.h                                            :+:      :+:    :+:   */
+/*   malloc_wraper.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: shmorish <shmorish@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/30 03:15:51 by shmorish          #+#    #+#             */
-/*   Updated: 2024/05/02 00:17:34 by shmorish         ###   ########.fr       */
+/*   Created: 2000/01/01 00:00:00 by shmorish          #+#    #+#             */
+/*   Updated: 2000/01/01 00:00:00 by shmorish         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef UTILS_H
-# define UTILS_H
+#include <stdlib.h>
+#include <stdio.h>
 
-# include <unistd.h>
-
-pid_t	ft_getpid(void);
-void	*malloc_wrapper(void *ret);
-
-#endif
+void	*malloc_wrapper(void *ret)
+{
+	if (ret == NULL)
+	{
+		perror("malloc");
+		exit(1);
+	}
+	return (ret);
+}
