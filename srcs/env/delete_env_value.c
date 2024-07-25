@@ -12,29 +12,25 @@
 
 #include "env.h"
 
-t_env	*delete_env_value(t_env *head, char *key)
+void	free_env(void *env)
 {
-	t_env	*current;
-	t_env	*prev;
-	t_env	*next;
+	t_env	*tmp;
 
-	current = head;
-	while (current)
-	{
-		if (!ft_memcmp(current->name, key, ft_strlen(key) + 1))
-		{
-			prev = current->prev;
-			next = current->next;
-			if (prev)
-				prev->next = next;
-			if (next)
-				next->prev = prev;
-			free(current->name);
-			free(current->value);
-			free(current);
-			break ;
-		}
-		current = current->next;
-	}
-	return (head);
+	tmp = (t_env *)env;
+	free(tmp->name);
+	free(tmp->value);
+	free(tmp);
+}
+
+void	delete_env_value(t_dlist **head, char *key)
+{
+	t_dlist	*list;
+
+	list = ft_dlstpop_middle(get_envlist_with_key(*head, key));
+	ft_dlstdelone((t_dlist *)list, free_env);
+}
+
+void	free_all_env(t_dlist *head)
+{
+	ft_dlstclear(&head, free_env);
 }

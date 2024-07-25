@@ -21,11 +21,7 @@ static char	*split_env_to_key(char *envp)
 	while (envp[i] && envp[i] != '=')
 		i++;
 	key = ft_substr(envp, 0, i);
-	if (!key)
-	{
-		perror("malloc");
-		exit(1);
-	}
+	key = malloc_wrapper(key);
 	return (key);
 }
 
@@ -40,74 +36,51 @@ static char	*split_env_to_value(char *envp)
 	if (envp[i] == '=')
 		i++;
 	value = ft_strdup(envp + i);
-	if (!value)
-	{
-		perror("malloc");
-		exit(1);
-	}
+	value = malloc_wrapper(value);
 	return (value);
 }
 
-static t_env	*add_prompt_env(t_env *head, const pid_t pid)
+static t_dlist	*add_shell_env(void)
 {
-	t_env	*new_env;
+	t_dlist	*head;
 	char	*key;
-	char	*value;
+	char	*val;
 
-	key = ft_strdup("PS1");
-	value = ft_strdup("minishell$ ");
-	new_env = create_env(key, value, true);
-	head = add_env_value(head, new_env);
-	key = ft_strdup("PS2");
-	value = ft_strdup("> ");
-	new_env = create_env(key, value, true);
-	head = add_env_value(head, new_env);
-	key = ft_strdup("$");
-	value = ft_itoa(pid);
-	new_env = create_env(key, value, true);
-	head = add_env_value(head, new_env);
-	key = ft_strdup("0");
-	value = ft_strdup("minishell");
-	new_env = create_env(key, value, true);
-	head = add_env_value(head, new_env);
+	key = malloc_wrapper(ft_strdup("PS1"));
+	val = malloc_wrapper(ft_strdup("minishell$ "));
+	head = ft_dlstnew(create_env(key, val, true));
+	key = malloc_wrapper(ft_strdup("PS2"));
+	val = malloc_wrapper(ft_strdup("> "));
+	ft_dlstadd_back(&head, ft_dlstnew(create_env(key, val, true)));
+	key = malloc_wrapper(ft_strdup("SHLVL"));
+	val = malloc_wrapper(ft_strdup("0"));
+	ft_dlstadd_back(&head, ft_dlstnew(create_env(key, val, true)));
+	key = malloc_wrapper(ft_strdup("PATH"));
+	val = malloc_wrapper(ft_strdup("/usr/local/bin:/bin:/usr/bin:."));
+	ft_dlstadd_back(&head, ft_dlstnew(create_env(key, val, true)));
 	return (head);
 }
 
-t_env	*env_init(char **envp, const pid_t pid)
+t_dlist	*env_init(char **envp)
 {
-	t_env	*head;
-	t_env	*new_env;
+	t_dlist	*head;
+	t_env	*env;
 	char	*key;
-	char	*value;
+	char	*val;
 	int		i;
 
-	i = 0;
-	head = NULL;
+	head = add_shell_env();
 	if (envp != NULL)
 	{
+		i = 0;
 		while (envp[i])
 		{
 			key = split_env_to_key(envp[i]);
-			value = split_env_to_value(envp[i]);
-			new_env = create_env(key, value, false);
-			head = add_env_value(head, new_env);
+			val = split_env_to_value(envp[i]);
+			env = create_env(key, val, false);
+			ft_dlstadd_back(&head, ft_dlstnew(env));
 			i++;
 		}
 	}
-	head = add_prompt_env(head, pid);
 	return (head);
-}
-
-void	free_all_env(t_env *head)
-{
-	t_env	*tmp;
-
-	while (head)
-	{
-		tmp = head;
-		head = head->next;
-		free(tmp->name);
-		free(tmp->value);
-		free(tmp);
-	}
 }

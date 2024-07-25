@@ -12,27 +12,46 @@
 
 #include "env.h"
 
-void	print_env(t_env *head)
+void	print_env(t_dlist *head)
 {
-	t_env	*current;
+	t_dlist	*current;
+	char	*key;
+	char	*value;
 
 	current = head;
 	while (current)
 	{
-		if (!current->hidden)
+		if (!((t_env *)current->content)->hidden)
 		{
-			printf("%s=%s\n", current->name, current->value);
+			key = ((t_env *)current->content)->name;
+			value = ((t_env *)current->content)->value;
+			printf("%s=%s\n", key, value);
 		}
 		current = current->next;
 	}
 }
 
-static void	sort_env(t_env *head)
+void	init_num_to_zero(t_dlist *head)
 {
-	t_env	*current_1;
-	t_env	*current_2;
-	int		i;
+	t_dlist	*current;
 
+	current = head;
+	while (current)
+	{
+		((t_env *)current->content)->num = 0;
+		current = current->next;
+	}
+}
+
+static void	sort_env(t_dlist *head)
+{
+	t_dlist	*current_1;
+	t_dlist	*current_2;
+	int		i;
+	char	*one;
+	char	*two;
+
+	init_num_to_zero(head);
 	current_1 = head;
 	while (current_1)
 	{
@@ -40,26 +59,27 @@ static void	sort_env(t_env *head)
 		i = 0;
 		while (current_2)
 		{
-			if (ft_memcmp(current_1->name, current_2->name,
-					ft_strlen(current_1->name) + 1) > 0)
-			{
+			one = ((t_env *)current_1->content)->name;
+			two = ((t_env *)current_2->content)->name;
+			if (ft_strcmp(one, two) > 0)
 				i++;
-			}
 			current_2 = current_2->next;
 		}
-		current_1->num = i;
+		((t_env *)current_1->content)->num = i;
 		current_1 = current_1->next;
 	}
 }
 
-static t_env	*find_env_by_num(t_env *head, int num)
+static t_dlist	*find_env_by_num(t_dlist *head, int num)
 {
-	t_env	*current;
+	t_dlist	*current;
+	int		current_num;
 
 	current = head;
 	while (current)
 	{
-		if (current->num == num)
+		current_num = ((t_env *)current->content)->num;
+		if (current_num == num)
 		{
 			return (current);
 		}
@@ -68,19 +88,25 @@ static t_env	*find_env_by_num(t_env *head, int num)
 	return (NULL);
 }
 
-void	print_env_export(t_env *head)
+void	print_env_export(t_dlist *head)
 {
-	t_env	*current;
+	t_dlist	*current;
 	int		num;
+	bool	hidden;
+	char	*name;
+	char	*value;
 
 	sort_env(head);
 	num = 0;
 	while (find_env_by_num(head, num))
 	{
 		current = find_env_by_num(head, num);
-		if (!current->hidden)
+		hidden = ((t_env *)current->content)->hidden;
+		name = ((t_env *)current->content)->name;
+		value = ((t_env *)current->content)->value;
+		if (!hidden)
 		{
-			printf("declare -x %s=\"%s\"\n", current->name, current->value);
+			printf("%s=%s\n", name, value);
 		}
 		num++;
 	}

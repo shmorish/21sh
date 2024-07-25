@@ -16,42 +16,23 @@ t_env	*create_env(char *name, char *value, bool hidden)
 {
 	t_env	*new_env;
 
-	new_env = (t_env *)malloc(sizeof(t_env));
-	if (!new_env)
-	{
-		perror("malloc");
-		exit(1);
-	}
+	new_env = (t_env *)ft_calloc(1, sizeof(t_env));
+	new_env = malloc_wrapper(new_env);
 	new_env->name = name;
 	new_env->value = value;
 	new_env->hidden = hidden;
-	new_env->next = NULL;
-	new_env->prev = NULL;
 	new_env->num = 0;
 	return (new_env);
 }
 
-t_env	*add_env_value(t_env *head, t_env *new_env)
+void	add_env_value(t_dlist **head, char *name, char *value, bool hidden)
 {
-	t_env	*current;
-	char	*key;
-	bool	hidden;
+	t_env	*new_env;
+	char	*val;
 
-	if (!new_env)
-		return (head);
-	if (!head)
-		return (new_env);
-	hidden = false;
-	key = new_env->name;
-	if (get_env_by_key(head, key))
-	{
-		head = delete_env_value(head, key);
-	}
-	current = head;
-	while (current->next)
-		current = current->next;
-	current->next = new_env;
-	new_env->hidden = hidden;
-	new_env->prev = current;
-	return (head);
+	val = get_env_value(*head, name);
+	if (val)
+		delete_env_value(head, name);
+	new_env = create_env(name, value, hidden);
+	ft_dlstadd_back(head, ft_dlstnew(new_env));
 }

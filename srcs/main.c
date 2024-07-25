@@ -39,13 +39,13 @@ void	cleanup(char *line)
 int	main(int argc, char **argv, char **envp)
 {
 	char		*line;
-	const pid_t	pid = ft_getpid();
-	t_env		*env;
+	t_dlist		*env;
 
 	(void)argc, (void)argv;
+	set_proccess_id(getpid());
 	rl_instream = stdin;
 	rl_outstream = stderr;
-	env = env_init(envp, pid);
+	env = env_init(envp);
 	while (1)
 	{
 		ft_dprintf(STDERR_FILENO, "\033[0m");
