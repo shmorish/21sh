@@ -6,7 +6,7 @@
 /*   By: tkuramot <tkuramot@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 16:46:52 by tkuramot          #+#    #+#             */
-/*   Updated: 2024/07/15 23:18:53 by kura             ###   ########.fr       */
+/*   Updated: 2024/07/26 01:10:14 by kura             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static bool	lx_tokenize_reserved(t_dlist **lst, const char **str)
 		|| lx_startswith(s, "$("))
 	{
 		ft_dlstadd_back(lst,
-			or_exit(ft_dlstnew(lx_token_new(TK_RSVD, s, 2)), ERR_MALLOC));
+			or_exit(ft_dlstnew(lx_token_new(TK_RSVD, s, 2))));
 		*str += 2;
 		return (true);
 	}
@@ -33,7 +33,7 @@ static bool	lx_tokenize_reserved(t_dlist **lst, const char **str)
 		|| *s == '{' || *s == '}' || *s == '<' || *s == '>' || *s == '`')
 	{
 		ft_dlstadd_back(lst,
-			or_exit(ft_dlstnew(lx_token_new(TK_RSVD, s, 1)), ERR_MALLOC));
+			or_exit(ft_dlstnew(lx_token_new(TK_RSVD, s, 1))));
 		(*str)++;
 		return (true);
 	}
@@ -65,7 +65,7 @@ static bool	lx_tokenize_word(t_dlist **lst, const char **s)
 			(*s)++;
 	}
 	ft_dlstadd_back(lst,
-		or_exit(ft_dlstnew(lx_token_new(TK_WORD, t, *s - t)), ERR_MALLOC));
+		or_exit(ft_dlstnew(lx_token_new(TK_WORD, t, *s - t))));
 	return (true);
 }
 
@@ -86,7 +86,7 @@ t_dlist	*tokenize(const char *s)
 			continue ;
 	}
 	ft_dlstadd_back(&cur,
-		or_exit(ft_dlstnew(lx_token_new(TK_EOF, s, 0)), ERR_MALLOC));
+		or_exit(ft_dlstnew(lx_token_new(TK_EOF, s, 0))));
 	return (head.next);
 }
 
