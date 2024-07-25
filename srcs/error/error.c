@@ -6,7 +6,7 @@
 /*   By: kura <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 20:16:58 by kura              #+#    #+#             */
-/*   Updated: 2024/07/15 02:00:43 by kura             ###   ########.fr       */
+/*   Updated: 2024/07/26 01:09:25 by kura             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,15 +38,12 @@ void	syntax_error(char *fmt, ...)
 	va_end(ap);
 }
 
-void	*or_exit(void *ptr, char *fmt, ...)
+void	*or_exit(void *ptr)
 {
-	va_list	ap;
-
 	if (ptr)
+	{
 		return (ptr);
-	ft_dprintf(STDERR_FILENO, "fatal error: ");
-	va_start(ap, fmt);
-	ft_vprintf(STDERR_FILENO, fmt, &ap);
-	va_end(ap);
-	exit(1);
+	}
+	fatal_error(ERR_MALLOC);
+	return (NULL);
 }
