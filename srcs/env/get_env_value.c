@@ -20,12 +20,12 @@ char	*get_env_value(t_dlist *head, char *key)
 	t_dlist	*env;
 
 	if (ft_memcmp(key, "0", 2) == 0)
-		return (malloc_wrapper(ft_strdup(CURRENT_SHELL)));
-	if (ft_memcmp(key, "?", 2) == 0)
-		return (malloc_wrapper(ft_itoa(get_exit_status())));
+		return (CURRENT_SHELL);
+	// if (ft_memcmp(key, "?", 2) == 0)
+	// 	return (malloc_wrapper(ft_itoa(get_exit_status())));
 	env = get_envlist_with_key(head, key);
 	if (env)
-		return (malloc_wrapper(ft_strdup(((t_env *)env->content)->value)));
+		return (((t_env *)env->content)->value);
 	return (NULL);
 }
 

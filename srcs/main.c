@@ -54,11 +54,7 @@ int	main(int argc, char **argv, char **envp)
 			exit_command_line(get_exit_status());
 		add_history(line);
 		set_token_list(tokenize(line));
-		if (get_exit_status() != 0)
-		{
-			cleanup(line);
-			continue ;
-		}
+		cleanup(line);
 		lx_debug(get_token_list());
 	}
 	free_all_env(env);
