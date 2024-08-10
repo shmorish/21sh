@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   add_env_value.c                                    :+:      :+:    :+:   */
+/*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mori <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -11,34 +11,53 @@
 /* ************************************************************************** */
 
 #include "env.h"
+
 t_env *get_env_head(void);
-void store_env_head(t_env *head);
-t_env	*node_init(bool hidden);
-void	node_add_back(t_env *new);
 
-void	add_env_value(char *key, char *value, bool hidden)
+char	*split_env_to_key(char *envp)
 {
-	t_env	*new;
+	int		i;
+	char	*key;
 
-	new = node_init(hidden);
-	new->name = malloc_wrapper(ft_strdup(key));
-	// printf("key: %s\n", key);
-	// printf("new->name: %s\n", new->name);
-	if (value)
-		new->value = malloc_wrapper(ft_strdup(value));
-	else
-		new->value = NULL;
-	// printf("value: [%s]\n", value);
-	node_add_back(new);
+	i = 0;
+	while (envp[i] && envp[i] != '=')
+		i++;
+	key = ft_substr(envp, 0, i);
+	key = malloc_wrapper(key);
+	return (key);
+}
+
+char	*split_env_to_value(char *envp)
+{
+	int		i;
+	char	*value;
+
+	i = 0;
+	while (envp[i] && envp[i] != '=')
+		i++;
+	if (envp[i] == '=')
+		i++;
+	value = ft_strdup(envp + i);
+	value = malloc_wrapper(value);
+	return (value);
 }
 
 
-void	add_init_shell_variable(void)
+void	free_all_env(void)
 {
-	add_env_value("PS1", "minishell$ ", true);
-	add_env_value("PS2", "> ", true);
-	add_env_value("PATH", "/usr/local/bin:/bin:/usr/bin:.", true);
-	add_env_value("SHLVL", "0", false);
-	add_env_value("OLDPWD", NULL, false);
-	add_env_value("PWD", getcwd(NULL, 0), false);
+	t_env	*head;
+	t_env	*current;
+	t_env	*tmp;
+
+	head = get_env_head();
+	current = head->next;
+	while (current != head)
+	{
+		tmp = current;
+		current = current->next;
+		free(tmp->name);
+		free(tmp->value);
+		free(tmp);
+	}
+	free(head);
 }

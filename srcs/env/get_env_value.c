@@ -14,44 +14,41 @@
 #include "utils.h"
 #include "executor.h"
 
-// must free the return value
-char	*get_env_value(t_dlist *head, char *key)
-{
-	t_dlist	*env;
+t_env *get_env_head(void);
 
-	if (ft_memcmp(key, "0", 2) == 0)
-		return (CURRENT_SHELL);
-	// if (ft_memcmp(key, "?", 2) == 0)
-	// 	return (malloc_wrapper(ft_itoa(get_exit_status())));
-	env = get_envlist_with_key(head, key);
-	if (env)
-		return (((t_env *)env->content)->value);
-	return (NULL);
+char    *get_env_value(char *key)
+{
+    t_env	*env;
+
+    env = get_env_by_key(key);
+    if (env)
+        return (env->value);
+    return (NULL);
 }
 
-static int	compare_env(void *actual, void *expected)
+t_env	*get_env_by_key(char *key)
 {
-	t_env	*actual_env;
-	t_env	*expected_env;
-	char	*actual_name;
-	char	*expected_name;
+    t_env	*head;
+    t_env	*current;
 
-	actual_env = actual;
-	actual_name = actual_env->name;
-	expected_env = expected;
-	expected_name = expected_env->name;
-	if (!ft_memcmp(actual_name, expected_name,
-			ft_strlen(expected_name) + 1))
-		return (1);
-	return (0);
-}
-
-t_dlist	*get_envlist_with_key(t_dlist *head, char *key)
-{
-	t_env		env;
-	t_dlist		*find;
-
-	env.name = key;
-	find = ft_dlstfind(head, &env, compare_env);
-	return (find);
+    head = get_env_head();
+    if (head == NULL)
+        return (NULL);
+    current = head;
+    while (1)
+    {
+        // printf("current n, v: %s, %s\n", current->name, current->value);
+        // printf("key: %s, len: %ld\n", key, ft_strlen(key));
+        if (ft_memcmp(current->name, key, ft_strlen(key) + 1) == 0)
+        {
+            // printf("key: %s, len: %ld\n", key, ft_strlen(key));
+            // printf("current n, v: %s, %s\n", current->name, current->value);
+            return (current);
+        }
+            
+        current = current->next;
+        if (current == head)
+            break ;
+    }
+    return (NULL);
 }

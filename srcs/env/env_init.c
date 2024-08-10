@@ -12,75 +12,115 @@
 
 #include "env.h"
 
-static char	*split_env_to_key(char *envp)
-{
-	int		i;
-	char	*key;
+void store_env_head(t_env *head);
+t_env *get_env_head(void);
+t_env	*get_env_by_key(char *key);
 
-	i = 0;
-	while (envp[i] && envp[i] != '=')
-		i++;
-	key = ft_substr(envp, 0, i);
-	key = malloc_wrapper(key);
-	return (key);
+char	*split_env_to_key(char *envp);
+char	*split_env_to_value(char *envp);
+void	add_init_shell_variable(void);
+
+// static t_dlist	*add_shell_env(void)
+// {
+// 	t_dlist	*head;
+// 	char	*key;
+// 	char	*val;
+
+// 	key = malloc_wrapper(ft_strdup("PS1"));
+// 	val = malloc_wrapper(ft_strdup("minishell$ "));
+// 	head = ft_dlstnew(create_env(key, val, true));
+// 	key = malloc_wrapper(ft_strdup("PS2"));
+// 	val = malloc_wrapper(ft_strdup("> "));
+// 	ft_dlstadd_back(&head, ft_dlstnew(create_env(key, val, true)));
+// 	key = malloc_wrapper(ft_strdup("SHLVL"));
+// 	val = malloc_wrapper(ft_strdup("0"));
+// 	ft_dlstadd_back(&head, ft_dlstnew(create_env(key, val, true)));
+// 	key = malloc_wrapper(ft_strdup("PATH"));
+// 	val = malloc_wrapper(ft_strdup("/usr/local/bin:/bin:/usr/bin:."));
+// 	ft_dlstadd_back(&head, ft_dlstnew(create_env(key, val, true)));
+// 	return (head);
+// }
+
+void	node_add_back(t_env *new)
+{
+	t_env	*head;
+
+	head = get_env_head();
+	if (new == NULL)
+		return ;
+	if (head == NULL)
+	{
+		new->next = new;
+		new->prev = new;
+		store_env_head(new);
+		return ;
+	}
+	new->next = head;
+	new->prev = head->prev;
+	head->prev->next = new;
+	head->prev = new;
 }
 
-static char	*split_env_to_value(char *envp)
+t_env	*node_init(bool hidden)
 {
-	int		i;
-	char	*value;
+	t_env	*new;
 
-	i = 0;
-	while (envp[i] && envp[i] != '=')
-		i++;
-	if (envp[i] == '=')
-		i++;
-	value = ft_strdup(envp + i);
-	value = malloc_wrapper(value);
-	return (value);
+	new = malloc_wrapper(ft_calloc(1, sizeof(t_env)));
+	new->name = NULL;
+	new->value = NULL;
+	new->hidden = hidden;
+	new->num = 0;
+	new->next = NULL;
+	new->prev = NULL;
+	return (new);
 }
 
-static t_dlist	*add_shell_env(void)
+void	env_init(char **envp)
 {
-	t_dlist	*head;
+	// t_env	*head;
+	t_env	*new;
 	char	*key;
-	char	*val;
-
-	key = malloc_wrapper(ft_strdup("PS1"));
-	val = malloc_wrapper(ft_strdup("minishell$ "));
-	head = ft_dlstnew(create_env(key, val, true));
-	key = malloc_wrapper(ft_strdup("PS2"));
-	val = malloc_wrapper(ft_strdup("> "));
-	ft_dlstadd_back(&head, ft_dlstnew(create_env(key, val, true)));
-	key = malloc_wrapper(ft_strdup("SHLVL"));
-	val = malloc_wrapper(ft_strdup("0"));
-	ft_dlstadd_back(&head, ft_dlstnew(create_env(key, val, true)));
-	key = malloc_wrapper(ft_strdup("PATH"));
-	val = malloc_wrapper(ft_strdup("/usr/local/bin:/bin:/usr/bin:."));
-	ft_dlstadd_back(&head, ft_dlstnew(create_env(key, val, true)));
-	return (head);
-}
-
-t_dlist	*env_init(char **envp)
-{
-	t_dlist	*head;
-	t_env	*env;
-	char	*key;
-	char	*val;
 	int		i;
 
-	head = add_shell_env();
+	add_init_shell_variable();
+	// head = get_env_head();
 	if (envp != NULL)
 	{
 		i = 0;
 		while (envp[i])
 		{
 			key = split_env_to_key(envp[i]);
-			val = split_env_to_value(envp[i]);
-			env = create_env(key, val, false);
-			ft_dlstadd_back(&head, ft_dlstnew(env));
+			if (get_env_by_key(key) == NULL)
+			{
+				new = node_init(false);
+				new->name = ft_strdup(key);
+			}
+			else
+			{
+				new = get_env_by_key(key);
+				free(new->value);
+			}
+			new->value = split_env_to_value(envp[i]);
+			node_add_back(new);
+			free(key);
+			key = NULL;
 			i++;
 		}
 	}
-	return (head);
+	// store_env_head(head);
 }
+
+
+// shell変数 (PS1, PS2, PATH) を追加
+// 環境変数 (PWD, SHLVL, OLDPWD) を追加
+
+// [export KEY=VALUE] で環境変数を追加
+// [export KEY]       でSHELL変数を環境変数へ昇格
+// [export KEY]       で環境変数に代入
+// [export]           で全環境変数を表示
+// [unset KEY]        で環境変数を削除
+
+// KEY=
+// env -> nothing
+// export KEY
+// env -> KEY=

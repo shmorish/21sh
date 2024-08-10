@@ -1,39 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.h                                              :+:      :+:    :+:   */
+/*   env_init.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mori <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/12 20:17:07 by mori              #+#    #+#             */
-/*   Updated: 2024/07/13 03:00:19 by mori             ###   ########.fr       */
+/*   Created: 2000/01/01 00:00:00 by mori              #+#    #+#             */
+/*   Updated: 2000/01/01 00:00:00 by mori             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ENV_H
-# define ENV_H
+#include "env.h"
 
-# include <stdbool.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include "libft.h"
-# include "utils.h"
-
-typedef struct s_env	t_env;
-
-typedef struct s_env
+static t_env    *env_head_helper(t_env *head, bool set)
 {
-	char	*name;
-	char	*value;
-	bool	hidden;
-	int		num;
-	t_env	*next;
-	t_env	*prev;
-}	t_env;
+    static t_env	*env_head = NULL;
 
-void	env_init(char **envp);
-t_env	*get_env_by_key(char *key);
-void	free_all_env(void);
-char    *get_env_value(char *key);
+    if (set)
+        env_head = head;
+    return (env_head);
+}
 
-#endif
+
+void store_env_head(t_env *head)
+{
+    env_head_helper(head, true);
+}
+
+t_env *get_env_head(void)
+{
+    return (env_head_helper(NULL, false));
+}

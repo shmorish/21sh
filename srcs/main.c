@@ -39,17 +39,17 @@ void	cleanup(char *line)
 int	main(int argc, char **argv, char **envp)
 {
 	char		*line;
-	t_dlist		*env;
 
 	(void)argc, (void)argv;
 	set_proccess_id(getpid());
 	rl_instream = stdin;
 	rl_outstream = stderr;
-	env = env_init(envp);
+	env_init(envp);
 	while (1)
 	{
 		ft_dprintf(STDERR_FILENO, "\033[0m");
-		line = readline(get_env_value(env, "PS1"));
+		// line = readline("minishell$ ");
+		line = readline(get_env_value("PS1"));
 		if (!line)
 			exit_command_line(get_exit_status());
 		add_history(line);
@@ -57,6 +57,6 @@ int	main(int argc, char **argv, char **envp)
 		cleanup(line);
 		lx_debug(get_token_list());
 	}
-	free_all_env(env);
+	free_all_env();
 	return (0);
 }
