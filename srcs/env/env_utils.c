@@ -12,8 +12,6 @@
 
 #include "env.h"
 
-t_env *get_env_head(void);
-
 char	*split_env_to_key(char *envp)
 {
 	int		i;
@@ -41,7 +39,6 @@ char	*split_env_to_value(char *envp)
 	value = malloc_wrapper(value);
 	return (value);
 }
-
 
 void	free_all_env(void)
 {

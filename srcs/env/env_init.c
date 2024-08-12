@@ -12,35 +12,6 @@
 
 #include "env.h"
 
-void store_env_head(t_env *head);
-t_env *get_env_head(void);
-t_env	*get_env_by_key(char *key);
-
-char	*split_env_to_key(char *envp);
-char	*split_env_to_value(char *envp);
-void	add_init_shell_variable(void);
-
-// static t_dlist	*add_shell_env(void)
-// {
-// 	t_dlist	*head;
-// 	char	*key;
-// 	char	*val;
-
-// 	key = malloc_wrapper(ft_strdup("PS1"));
-// 	val = malloc_wrapper(ft_strdup("minishell$ "));
-// 	head = ft_dlstnew(create_env(key, val, true));
-// 	key = malloc_wrapper(ft_strdup("PS2"));
-// 	val = malloc_wrapper(ft_strdup("> "));
-// 	ft_dlstadd_back(&head, ft_dlstnew(create_env(key, val, true)));
-// 	key = malloc_wrapper(ft_strdup("SHLVL"));
-// 	val = malloc_wrapper(ft_strdup("0"));
-// 	ft_dlstadd_back(&head, ft_dlstnew(create_env(key, val, true)));
-// 	key = malloc_wrapper(ft_strdup("PATH"));
-// 	val = malloc_wrapper(ft_strdup("/usr/local/bin:/bin:/usr/bin:."));
-// 	ft_dlstadd_back(&head, ft_dlstnew(create_env(key, val, true)));
-// 	return (head);
-// }
-
 void	node_add_back(t_env *new)
 {
 	t_env	*head;
@@ -77,39 +48,31 @@ t_env	*node_init(bool hidden)
 
 void	env_init(char **envp)
 {
-	// t_env	*head;
 	t_env	*new;
 	char	*key;
 	int		i;
 
 	add_init_shell_variable();
-	// head = get_env_head();
-	if (envp != NULL)
+	if (envp == NULL)
+		return ;
+	i = 0;
+	while (envp[i])
 	{
-		i = 0;
-		while (envp[i])
+		key = split_env_to_key(envp[i]);
+		new = get_env_by_key(key);
+		if (new == NULL)
 		{
-			key = split_env_to_key(envp[i]);
-			if (get_env_by_key(key) == NULL)
-			{
-				new = node_init(false);
-				new->name = ft_strdup(key);
-			}
-			else
-			{
-				new = get_env_by_key(key);
-				free(new->value);
-			}
-			new->value = split_env_to_value(envp[i]);
-			node_add_back(new);
-			free(key);
-			key = NULL;
-			i++;
+			new = node_init(false);
+			new->name = ft_strdup(key);
 		}
+		else
+			free(new->value);
+		new->value = split_env_to_value(envp[i]);
+		node_add_back(new);
+		free(key);
+		i++;
 	}
-	// store_env_head(head);
 }
-
 
 // shell変数 (PS1, PS2, PATH) を追加
 // 環境変数 (PWD, SHLVL, OLDPWD) を追加

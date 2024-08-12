@@ -48,7 +48,6 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		ft_dprintf(STDERR_FILENO, "\033[0m");
-		// line = readline("minishell$ ");
 		line = readline(get_env_value("PS1"));
 		if (!line)
 			exit_command_line(get_exit_status());

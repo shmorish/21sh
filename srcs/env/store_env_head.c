@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_init.c                                         :+:      :+:    :+:   */
+/*   store_env_head.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mori <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,22 +12,21 @@
 
 #include "env.h"
 
-static t_env    *env_head_helper(t_env *head, bool set)
+static t_env	*env_head_helper(t_env *head, bool set)
 {
-    static t_env	*env_head = NULL;
+	static t_env	*env_head = NULL;
 
-    if (set)
-        env_head = head;
-    return (env_head);
+	if (set)
+		env_head = head;
+	return (env_head);
 }
 
-
-void store_env_head(t_env *head)
+void	store_env_head(t_env *head)
 {
-    env_head_helper(head, true);
+	env_head_helper(head, true);
 }
 
-t_env *get_env_head(void)
+t_env	*get_env_head(void)
 {
-    return (env_head_helper(NULL, false));
+	return (env_head_helper(NULL, false));
 }
