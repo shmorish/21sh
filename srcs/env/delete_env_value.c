@@ -44,6 +44,7 @@ void	delete_env_value(char *key)
 			if (env->next == env)
 			{
 				store_env_head(NULL);
+				pop_env(env);
 				return ;
 			}
 			pop_env(env);
