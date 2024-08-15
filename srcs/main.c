@@ -41,6 +41,7 @@ char	*readline_with_prompt(void)
 	char	*line;
 	char	*ps1;
 
+	ft_dprintf(STDERR_FILENO, "\033[0m");
 	ps1 = get_env_value("PS1");
 	line = readline(ps1);
 	free(ps1);
@@ -61,8 +62,11 @@ int	main(int argc, char **argv, char **envp)
 	env_init(envp);
 	while (1)
 	{
-		ft_dprintf(STDERR_FILENO, "\033[0m");
 		line = readline_with_prompt();
+		if (ft_memcmp(line, "env", 4) == 0)
+			print_env();
+		if (ft_memcmp(line, "export", 7) == 0)
+			print_env_export();
 		set_token_list(tokenize(line));
 		cleanup(line);
 		lx_debug(get_token_list());

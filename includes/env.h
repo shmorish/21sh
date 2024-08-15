@@ -56,4 +56,8 @@ t_env	*get_env_by_key(char *key);
 void	store_env_head(t_env *head);
 t_env	*get_env_head(void);
 
+// print_env.c
+void	print_env(void);
+void	print_env_export(void);
+
 #endif
