@@ -16,7 +16,6 @@ void	node_add_back(t_env *new)
 {
 	t_env	*head;
 
-	// printf("p :[%p] name :[%s], value :[%s]\n", new, new->name, new->value);
 	head = get_env_head();
 	if (new == NULL)
 		return ;
@@ -49,7 +48,6 @@ t_env	*node_init(bool hidden)
 
 void	env_init(char **envp)
 {
-	// t_env	*new;
 	char	*key;
 	char	*value;
 	int		i;
