@@ -36,22 +36,33 @@ void	cleanup(char *line)
 	free(line);
 }
 
+char	*readline_with_prompt(void)
+{
+	char	*line;
+	char	*ps1;
+
+	ps1 = get_env_value("PS1");
+	line = readline(ps1);
+	free(ps1);
+	if (!line)
+		exit_command_line(get_exit_status());
+	add_history(line);
+	return (line);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	char		*line;
 
 	(void)argc, (void)argv;
-	set_proccess_id(getpid());
+	set_proccess_id(ft_getpid());
 	rl_instream = stdin;
 	rl_outstream = stderr;
 	env_init(envp);
 	while (1)
 	{
 		ft_dprintf(STDERR_FILENO, "\033[0m");
-		line = readline(get_env_value("PS1"));
-		if (!line)
-			exit_command_line(get_exit_status());
-		add_history(line);
+		line = readline_with_prompt();
 		set_token_list(tokenize(line));
 		cleanup(line);
 		lx_debug(get_token_list());
