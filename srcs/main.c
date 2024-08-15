@@ -51,6 +51,14 @@ char	*readline_with_prompt(void)
 	return (line);
 }
 
+void	test_function(char *line)
+{
+	if (ft_memcmp(line, "env", 4) == 0)
+		print_env();
+	if (ft_memcmp(line, "export", 7) == 0)
+		print_env_export();
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	char		*line;
@@ -63,10 +71,7 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		line = readline_with_prompt();
-		if (ft_memcmp(line, "env", 4) == 0)
-			print_env();
-		if (ft_memcmp(line, "export", 7) == 0)
-			print_env_export();
+		test_function(line);
 		set_token_list(tokenize(line));
 		cleanup(line);
 		lx_debug(get_token_list());
