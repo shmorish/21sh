@@ -18,9 +18,15 @@ char	*get_env_value(char *key)
 {
 	t_env	*env;
 
+	if (key == NULL)
+		return (NULL);
+	if (ft_memcmp(key, "?", 2) == 0)
+		return (ft_itoa(get_exit_status()));
+	if (ft_memcmp(key, "$", 2) == 0)
+		return (ft_itoa(get_proccess_id()));
 	env = get_env_by_key(key);
 	if (env)
-		return (env->value);
+		return (ft_strdup(env->value));
 	return (NULL);
 }
 

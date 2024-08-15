@@ -48,8 +48,8 @@ t_env	*node_init(bool hidden)
 
 void	env_init(char **envp)
 {
-	t_env	*new;
 	char	*key;
+	char	*value;
 	int		i;
 
 	add_init_shell_variable();
@@ -59,17 +59,10 @@ void	env_init(char **envp)
 	while (envp[i])
 	{
 		key = split_env_to_key(envp[i]);
-		new = get_env_by_key(key);
-		if (new == NULL)
-		{
-			new = node_init(false);
-			new->name = ft_strdup(key);
-		}
-		else
-			free(new->value);
-		new->value = split_env_to_value(envp[i]);
-		node_add_back(new);
+		value = split_env_to_value(envp[i]);
+		add_env_value(key, value, false);
 		free(key);
+		free(value);
 		i++;
 	}
 }
