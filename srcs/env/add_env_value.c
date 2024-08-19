@@ -42,7 +42,7 @@ void	add_init_shell_variable(void)
 {
 	char	*current;	
 
-	add_env_value("PATH", "/usr/local/bin:/bin:/usr/bin:.", true);
+	add_env_value("PATH", DEFAULT_PATH, true);
 	add_env_value("PS1", "minishell$ ", true);
 	add_env_value("PS2", "> ", true);
 	add_env_value("OLDPWD", NULL, false);

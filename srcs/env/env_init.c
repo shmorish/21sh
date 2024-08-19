@@ -65,6 +65,7 @@ void	env_init(char **envp)
 		free(value);
 		i++;
 	}
+	shlvl_addition();
 }
 
 // shell変数 (PS1, PS2, PATH) を追加
