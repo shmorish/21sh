@@ -15,7 +15,8 @@
 
 # include <unistd.h>
 
-pid_t	ft_getpid(void);
+void	shell_error(void);
+bool	is_interactive(void);
 void	*malloc_wrapper(void *ret);
 
 #endif
