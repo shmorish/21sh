@@ -25,7 +25,7 @@
 
 void	exit_command_line(int exit_status)
 {
-	if (isatty(STDIN_FILENO))
+	if (is_interactive())
 		write(STDERR_FILENO, "exit\n", 6);
 	exit(exit_status);
 }
@@ -40,11 +40,22 @@ char	*readline_with_prompt(void)
 {
 	char	*line;
 	char	*ps1;
+	int		nul_fd;
 
 	ft_dprintf(STDERR_FILENO, "\033[0m");
-	ps1 = get_env_value("PS1");
-	line = readline(ps1);
-	free(ps1);
+	if (is_interactive())
+	{
+		ps1 = get_env_value("PS1");
+		line = readline(ps1);
+		free(ps1);
+	}
+	else
+	{
+		nul_fd = open("/dev/null", O_WRONLY);
+		dup2(nul_fd, STDERR_FILENO);
+		line = readline(NULL);
+		close(nul_fd);
+	}
 	if (!line)
 		exit_command_line(get_exit_status());
 	add_history(line);
