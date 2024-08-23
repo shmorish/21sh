@@ -24,7 +24,6 @@ static void	print_high_shlvl_warning(int new_shlvl)
 	ft_dprintf(STDERR_FILENO, "resetting to 1\n");
 }
 
-
 static int	get_new_shlvl(char *shlvl)
 {
 	int		shlvl_num;
