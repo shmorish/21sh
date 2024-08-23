@@ -45,8 +45,8 @@ int	main(int argc, char **argv, char **envp)
 		line = prompt();
 		test_function(line);
 		set_token_list(tokenize(line));
-		lx_debug(get_token_list());
 		cleanup(line);
+		lx_debug(get_token_list());
 	}
 	free_all_env();
 	return (0);
