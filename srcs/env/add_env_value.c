@@ -24,15 +24,15 @@ void	add_env_value(char *key, char *value, bool hidden)
 		if (value)
 		{
 			free(new->value);
-			new->value = malloc_wrapper(ft_strdup(value));
+			new->value = check_malloc_error(ft_strdup(value));
 		}
 		new->hidden = hidden;
 		return ;
 	}
 	new = node_init(hidden);
-	new->name = malloc_wrapper(ft_strdup(key));
+	new->name = check_malloc_error(ft_strdup(key));
 	if (value)
-		new->value = malloc_wrapper(ft_strdup(value));
+		new->value = check_malloc_error(ft_strdup(value));
 	else
 		new->value = NULL;
 	node_add_back(new);

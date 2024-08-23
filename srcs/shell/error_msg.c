@@ -1,18 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.h                                            :+:      :+:    :+:   */
+/*   error_msg.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: shmorish <shmorish@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2000/00/00 00:00:00 by shmorish          #+#    #+#             */
-/*   Updated: 2000/00/00 00:00:00 by shmorish         ###   ########.fr       */
+/*   Created: 2000/01/01 00:00:00 by shmorish          #+#    #+#             */
+/*   Updated: 2000/01/01 00:00:00 by shmorish         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef UTILS_H
-# define UTILS_H
+#include "libft.h"
+#include <errno.h>
+#include <string.h>
 
-void	*check_malloc_error(void *ret);
+#ifdef SHELL
+
+void	shell_error(void)
+{
+	ft_dprintf(STDERR_FILENO, "bash: ");
+}
+
+#else
+
+void	shell_error(void)
+{
+	ft_dprintf(STDERR_FILENO, "minishell: ");
+}
 
 #endif
+
+void	error_with_function(char *func_name)
+{
+	shell_error();
+	ft_dprintf(STDERR_FILENO, "%s: ", func_name);
+	ft_dprintf(STDERR_FILENO, "%s\n", strerror(errno));
+}

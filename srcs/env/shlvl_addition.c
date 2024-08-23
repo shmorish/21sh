@@ -10,8 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "env.h"
 #include "libft.h"
+#include "env.h"
+#include "shell.h"
 #include <errno.h>
 
 static void	print_high_shlvl_warning(int new_shlvl)
@@ -23,6 +24,7 @@ static void	print_high_shlvl_warning(int new_shlvl)
 	ft_dprintf(STDERR_FILENO, "resetting to 1\n");
 }
 
+
 static int	get_new_shlvl(char *shlvl)
 {
 	int		shlvl_num;
@@ -32,10 +34,12 @@ static int	get_new_shlvl(char *shlvl)
 	shlvl_num = ft_strtol(shlvl, &endptr, 10);
 	if (shlvl_num < 0 || errno == ERANGE)
 		return (1);
-	while (ft_isspace(*endptr))
+	while (*endptr != '\0')
+	{
+		if (!ft_isspace(*endptr))
+			return (1);
 		endptr++;
-	if (*endptr != '\0')
-		return (1);
+	}
 	new_shlvl = shlvl_num + 1;
 	if (shlvl_num > 999)
 	{

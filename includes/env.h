@@ -13,12 +13,8 @@
 #ifndef ENV_H
 # define ENV_H
 
-# include <stdbool.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <fcntl.h>
 # include <unistd.h>
-# include <sys/wait.h>
+# include <stdbool.h>
 # include "libft.h"
 # include "utils.h"
 

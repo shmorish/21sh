@@ -36,7 +36,7 @@ t_env	*node_init(bool hidden)
 {
 	t_env	*new;
 
-	new = malloc_wrapper(ft_calloc(1, sizeof(t_env)));
+	new = check_malloc_error(ft_calloc(1, sizeof(t_env)));
 	new->name = NULL;
 	new->value = NULL;
 	new->hidden = hidden;

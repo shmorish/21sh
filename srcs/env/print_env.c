@@ -23,7 +23,7 @@ void	print_env(void)
 	{
 		if (!env->hidden)
 			if (env->value)
-				printf("%s=%s\n", env->name, env->value);
+				ft_printf("%s=%s\n", env->name, env->value);
 		env = env->next;
 		if (env == head)
 			break ;
@@ -91,9 +91,9 @@ void	print_env_export(void)
 			if (!env->hidden)
 			{
 				if (env->value)
-					printf("declare -x %s=\"%s\"\n", env->name, env->value);
+					ft_printf("declare -x %s=\"%s\"\n", env->name, env->value);
 				else
-					printf("declare -x %s\n", env->name);
+					ft_printf("declare -x %s\n", env->name);
 			}
 			printed = env;
 			i++;

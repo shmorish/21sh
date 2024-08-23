@@ -22,7 +22,7 @@ static void	free_env(t_env *env)
 	env = NULL;
 }
 
-void	pop_env(t_env *env)
+static void	pop_env(t_env *env)
 {
 	env->prev->next = env->next;
 	env->next->prev = env->prev;

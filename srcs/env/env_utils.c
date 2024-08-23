@@ -21,7 +21,7 @@ char	*split_env_to_key(char *envp)
 	while (envp[i] && envp[i] != '=')
 		i++;
 	key = ft_substr(envp, 0, i);
-	key = malloc_wrapper(key);
+	key = check_malloc_error(key);
 	return (key);
 }
 
@@ -36,7 +36,7 @@ char	*split_env_to_value(char *envp)
 	if (envp[i] == '=')
 		i++;
 	value = ft_strdup(envp + i);
-	value = malloc_wrapper(value);
+	value = check_malloc_error(value);
 	return (value);
 }
 

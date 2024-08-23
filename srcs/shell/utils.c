@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   shell.c　　　　                                     :+:      :+:    :+:   */
+/*   utils.c　　　　                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: shmorish <shmorish@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,22 +12,6 @@
 
 #include "libft.h"
 #include <stdbool.h>
-
-#ifdef SHELL
-
-void	shell_error(void)
-{
-	ft_dprintf(STDERR_FILENO, "bash: ");
-}
-
-#else
-
-void	shell_error(void)
-{
-	ft_dprintf(STDERR_FILENO, "minishell: ");
-}
-
-#endif
 
 bool	is_interactive(void)
 {
