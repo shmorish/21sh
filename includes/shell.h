@@ -1,24 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   malloc_wraper.c                                    :+:      :+:    :+:   */
+/*   shell.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: shmorish <shmorish@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2000/01/01 00:00:00 by shmorish          #+#    #+#             */
-/*   Updated: 2000/01/01 00:00:00 by shmorish         ###   ########.fr       */
+/*   Created: 2000/00/00 00:00:00 by shmorish          #+#    #+#             */
+/*   Updated: 2000/00/00 00:00:00 by shmorish         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include <stdio.h>
+#ifndef SHELL_H
+# define SHELL_H
 
-void	*malloc_wrapper(void *ret)
-{
-	if (ret == NULL)
-	{
-		perror("malloc");
-		exit(1);
-	}
-	return (ret);
-}
+# include <stdbool.h>
+
+void	shell_error(void);
+bool	is_interactive(void);
+char	*prompt(void);
+void	error_msg(char *func_name);
+char	*shell_prompt(void);
+
+#endif

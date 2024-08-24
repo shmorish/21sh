@@ -40,6 +40,10 @@ ifeq ($(MAKECMDGOALS), address)
 	CFLAGS += -g3 -fsanitize=address
 endif
 
+ifeq ($(MAKECMDGOALS), shell)
+	CFLAGS += -DSHELL
+endif
+
 all			: $(NAME)
 
 $(NAME)	: $(LIBFT) $(LIBREADLINE) $(OBJS) 
@@ -75,9 +79,11 @@ fclean		: clean
 
 re			: fclean all
 
-debug		: re
+debug		: clean all
 
-address		: re
+address		: clean all
+
+shell		: clean all
 
 test: $(LIBCPPUTEST) $(LIBFT) $(LIBREADLINE) $(TEST_OBJS)
 	$(CXX) $(CXXFLAGS) -o test $(TEST_OBJS) $(TEST_LDFLAGS) $(TEST_LDLIBS)
@@ -93,6 +99,6 @@ help		: Makefile
 	@echo "  debug		- build $(NAME) with debug flag"
 	@echo "  help		- show this help"
 
-.PHONY		: all clean fclean re debug address help
+.PHONY		: all clean fclean re debug address shell help
 
 -include $(DEPS)

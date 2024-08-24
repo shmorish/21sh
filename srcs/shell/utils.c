@@ -1,18 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.h                                            :+:      :+:    :+:   */
+/*   utils.c　　　　                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: shmorish <shmorish@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2000/00/00 00:00:00 by shmorish          #+#    #+#             */
-/*   Updated: 2000/00/00 00:00:00 by shmorish         ###   ########.fr       */
+/*   Created: 2000/01/01 00:00:00 by shmorish          #+#    #+#             */
+/*   Updated: 2000/01/01 00:00:00 by shmorish         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef UTILS_H
-# define UTILS_H
+#include "libft.h"
+#include <stdbool.h>
 
-void	*check_malloc_error(void *ret);
-
-#endif
+bool	is_interactive(void)
+{
+	return (isatty(STDIN_FILENO) \
+			&& isatty(STDOUT_FILENO) \
+			&& isatty(STDERR_FILENO));
+}

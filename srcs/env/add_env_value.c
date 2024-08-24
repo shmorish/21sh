@@ -24,15 +24,15 @@ void	add_env_value(char *key, char *value, bool hidden)
 		if (value)
 		{
 			free(new->value);
-			new->value = malloc_wrapper(ft_strdup(value));
+			new->value = check_malloc_error(ft_strdup(value));
 		}
 		new->hidden = hidden;
 		return ;
 	}
 	new = node_init(hidden);
-	new->name = malloc_wrapper(ft_strdup(key));
+	new->name = check_malloc_error(ft_strdup(key));
 	if (value)
-		new->value = malloc_wrapper(ft_strdup(value));
+		new->value = check_malloc_error(ft_strdup(value));
 	else
 		new->value = NULL;
 	node_add_back(new);
@@ -42,7 +42,7 @@ void	add_init_shell_variable(void)
 {
 	char	*current;	
 
-	add_env_value("PATH", "/usr/local/bin:/bin:/usr/bin:.", true);
+	add_env_value("PATH", DEFAULT_PATH, true);
 	add_env_value("PS1", "minishell$ ", true);
 	add_env_value("PS2", "> ", true);
 	add_env_value("OLDPWD", NULL, false);

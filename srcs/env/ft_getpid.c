@@ -10,11 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "env.h"
 #include <fcntl.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <sys/wait.h>
-#include "libft.h"
 
 #ifdef __linux__
 
