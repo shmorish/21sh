@@ -28,9 +28,6 @@ char	*prompt(void)
 	ft_dprintf(STDERR_FILENO, "\033[0m");
 	line = shell_prompt();
 	if (!line)
-	{
-		history();
 		exit_command_line(get_exit_status());
-	}
 	return (line);
 }

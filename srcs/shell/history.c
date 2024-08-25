@@ -14,8 +14,3 @@
 #include <stdio.h>
 #include <readline/history.h>
 
-void	history(void)
-{
-	// write_history(HISTORY_FILE);
-	// clear_history();
-}
