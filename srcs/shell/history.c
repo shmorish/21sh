@@ -16,6 +16,6 @@
 
 void	history(void)
 {
-	write_history(HISTORY_FILE);
-	clear_history();
+	// write_history(HISTORY_FILE);
+	// clear_history();
 }

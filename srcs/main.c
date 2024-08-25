@@ -62,3 +62,9 @@ int	main(int argc, char **argv, char **envp)
 	free_all_env();
 	return (0);
 }
+
+__attribute__((destructor)) static void	destructor(void)
+{
+	write_history(HISTORY_FILE);
+	clear_history();
+}
