@@ -54,8 +54,6 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		line = prompt();
-		if (ft_strlen(line) == 0)
-			continue ;
 		test_function(line);
 		set_token_list(tokenize(line));
 		cleanup(line);
