@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   prompt.c                                           :+:      :+:    :+:   */
+/*   history.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: shmorish <shmorish@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,27 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "env.h"
-#include "executor.h"
 #include "shell.h"
+#include <stdio.h>
+#include <readline/history.h>
 
-static void	exit_command_line(int exit_status)
+void	history(void)
 {
-	if (is_interactive())
-		write(STDERR_FILENO, "exit\n", 6);
-	exit(exit_status);
-}
-
-char	*prompt(void)
-{
-	char	*line;
-
-	ft_dprintf(STDERR_FILENO, "\033[0m");
-	line = shell_prompt();
-	if (!line)
-	{
-		history();
-		exit_command_line(get_exit_status());
-	}
-	return (line);
+	write_history(HISTORY_FILE);
+	clear_history();
 }

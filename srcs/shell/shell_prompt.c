@@ -25,7 +25,11 @@ static char	*interactive_prompt(void)
 	ps1 = get_env_value("PS1");
 	line = readline(ps1);
 	free(ps1);
-	add_history(line);
+	if (!line)
+		return (NULL);
+	// expand history
+	if (ft_strlen(line) != 0)
+		add_history(line);
 	return (line);
 }
 

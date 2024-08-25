@@ -15,10 +15,13 @@
 
 # include <stdbool.h>
 
+# define HISTORY_FILE ".minishell_history"
+
 void	shell_error(void);
 bool	is_interactive(void);
 char	*prompt(void);
 void	error_msg(char *func_name);
 char	*shell_prompt(void);
+void	history(void);
 
 #endif
