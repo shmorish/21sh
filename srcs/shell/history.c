@@ -13,7 +13,6 @@
 #include "shell.h"
 #include "libft.h"
 #include <stdio.h>
-#include <stdlib.h>
 #include <readline/history.h>
 
 char	*expand_history(char *line)

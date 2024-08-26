@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include <stdbool.h>
+#include <unistd.h>
 
 bool	is_interactive(void)
 {
