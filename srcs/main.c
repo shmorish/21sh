@@ -61,12 +61,12 @@ int	main(int argc, char **argv, char **envp)
 		cleanup(line);
 		lx_debug(get_token_list());
 	}
-	free_all_env();
 	return (0);
 }
 
 __attribute__((destructor)) static void	destructor(void)
 {
+	free_all_env();
 	write_history(HISTORY_FILE);
 	clear_history();
 }
