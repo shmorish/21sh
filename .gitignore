@@ -4,3 +4,5 @@ minishell
 objs/
 .vscode/
 test
+
+.minishell_history
