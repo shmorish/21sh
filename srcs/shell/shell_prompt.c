@@ -27,9 +27,6 @@ static char	*interactive_prompt(void)
 	free(ps1);
 	if (!line)
 		return (NULL);
-	// expand history
-	if (ft_strlen(line) != 0)
-		add_history(line);
 	return (line);
 }
 
@@ -47,10 +44,18 @@ static char	*non_interactive_prompt(void)
 	return (line);
 }
 
+static void	history_append(char *line)
+{
+	if (is_interactive())
+	{
+		if (ft_strlen(line) != 0)
+			add_history(line);
+	}
+}
+
 char	*shell_prompt(void)
 {
 	char	*line;
-	char	*trm;
 	char	*expand_rslt;
 
 	if (is_interactive())
@@ -59,10 +64,10 @@ char	*shell_prompt(void)
 		line = non_interactive_prompt();
 	if (!line)
 		return (NULL);
-	trm = ft_strtrim(line, " \t");
-	free(line);
-	expand_rslt = tilde_expand(trm);
-	free(trm);
-	line = expand_rslt;
-	return (line);
+	line = expand_history(line);
+	if (!line)
+		return (NULL);
+	history_append(line);
+	expand_rslt = tidle(line);
+	return (expand_rslt);
 }
