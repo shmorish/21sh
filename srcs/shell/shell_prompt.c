@@ -12,6 +12,7 @@
 
 #include "env.h"
 #include "shell.h"
+#include "libft.h"
 #include <fcntl.h>
 #include <stdio.h>
 #include <readline/history.h>
@@ -67,7 +68,8 @@ char	*shell_prompt(void)
 	line = expand_history(line);
 	if (!line)
 		return (NULL);
-	history_append(line);
+	if (is_interactive())
+		history_append(line);
 	expand_rslt = tidle(line);
 	return (expand_rslt);
 }

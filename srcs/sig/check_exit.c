@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   shell.h                                            :+:      :+:    :+:   */
+/*   check_exit.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: shmorish <shmorish@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,41 +10,15 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SHELL_H
-# define SHELL_H
+#include "executor.h"
+#include <sys/wait.h>
 
-# include <stdbool.h>
-
-# define NORMAL 0
-# define ERROR 1
-# define HISTORY_FILE ".minishell_history"
-
-// error_msg.c
-void			shell_error(void);
-void			error_from_function(char *func_name);
-void			error_msg(char *func_name);
-
-// history.c
-char			*expand_history(char *line);
-
-// prompt.c
-char			*prompt(void);
-
-// shell_expand_error.c
-void			set_shell_error(int status);
-int				get_shell_error(void);
-
-// shell_prompt.c
-char			*shell_prompt(void);
-
-// terminal.c
-void			save_terminal(void);
-// struct termios	get_terminal(void);
-
-// tilde.c
-char			*tidle(char *line);
-
-// utils.c
-bool			is_interactive(void);
-
-#endif
+void	check_exit(int status)
+{
+	if (WIFEXITED(status))
+		set_exit_status(WEXITSTATUS(status));
+	else if (WIFSIGNALED(status))
+		set_exit_status(WTERMSIG(status) + 128);
+	else
+		set_exit_status(1);
+}

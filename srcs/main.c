@@ -14,10 +14,14 @@
 #include "executor.h"
 #include "lexer.h"
 #include "shell.h"
+#include "test.h"
 #include <errno.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+
+int	g_signal;
 
 void	cleanup(char *line)
 {
@@ -25,24 +29,19 @@ void	cleanup(char *line)
 	free(line);
 }
 
-void	test_function(char *line)
-{
-	if (ft_memcmp(line, "env", 4) == 0)
-		print_env();
-	if (ft_memcmp(line, "export", 7) == 0)
-		print_env_export();
-}
-
 __attribute__((constructor)) static void	constructor(void)
 {
 	const pid_t	pid = ft_getpid();
 
 	set_proccess_id(pid);
+	set_exit_status(0);
 	rl_instream = stdin;
 	rl_outstream = stderr;
 	using_history();
-	read_history(HISTORY_FILE);
+	if (is_interactive())
+		read_history(HISTORY_FILE);
 	errno = 0;
+	g_signal = 0;
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -56,10 +55,10 @@ int	main(int argc, char **argv, char **envp)
 		line = prompt();
 		if (get_shell_error() == ERROR)
 			continue ;
-		test_function(line);
+		test_function(line, envp);
 		set_token_list(tokenize(line));
-		cleanup(line);
 		lx_debug(get_token_list());
+		cleanup(line);
 	}
 	return (0);
 }

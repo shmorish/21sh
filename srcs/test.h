@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   prompt.c                                           :+:      :+:    :+:   */
+/*   test.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: shmorish <shmorish@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,32 +10,18 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "env.h"
-#include "executor.h"
-#include "shell.h"
-#include "libft.h"
-#include "sig.h"
-#include <stdlib.h>
+#ifndef TEST_H
+# define TEST_H
 
-static void	exit_command_line(int exit_status)
-{
-	if (is_interactive())
-		write(STDERR_FILENO, "exit\n", 6);
-	exit(exit_status);
-}
+# include "env.h"
+# include "executor.h"
+# include "lexer.h"
+# include "shell.h"
+# include <errno.h>
+# include <stdio.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 
-char	*prompt(void)
-{
-	char	*line;
+void	test_function(char *line, char **envp);
 
-	ft_dprintf(STDERR_FILENO, "\033[0m");
-	set_shell_error(NORMAL);
-	save_terminal();
-	signal_main_init();
-	line = shell_prompt();
-	if (get_shell_error() == ERROR)
-		return (NULL);
-	if (!line)
-		exit_command_line(get_exit_status());
-	return (line);
-}
+#endif

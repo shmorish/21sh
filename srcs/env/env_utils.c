@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "env.h"
+#include "libft.h"
 
 char	*split_env_to_key(char *envp)
 {

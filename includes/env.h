@@ -15,7 +15,7 @@
 
 # include <unistd.h>
 # include <stdbool.h>
-# include "libft.h"
+// # include "libft.h"
 # include "utils.h"
 
 # define DEFAULT_PATH "/usr/local/bin:/bin:/usr/bin:."

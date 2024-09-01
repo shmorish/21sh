@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   prompt.c                                           :+:      :+:    :+:   */
+/*   terminal.c　 　                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: shmorish <shmorish@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,32 +10,24 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "env.h"
-#include "executor.h"
-#include "shell.h"
-#include "libft.h"
-#include "sig.h"
-#include <stdlib.h>
+#include <termios.h>
+#include <unistd.h>
 
-static void	exit_command_line(int exit_status)
+void	save_terminal(void)
 {
-	if (is_interactive())
-		write(STDERR_FILENO, "exit\n", 6);
-	exit(exit_status);
+	struct termios	term;
+
+	tcgetattr(STDIN_FILENO, &term);
+	term.c_iflag |= ICRNL;
+	term.c_oflag |= ONLCR;
+	term.c_cflag |= B19200;
+	term.c_lflag |= (PENDIN | ICANON | ECHO);
+	tcsetattr(STDIN_FILENO, TCSANOW, &term);
 }
 
-char	*prompt(void)
-{
-	char	*line;
-
-	ft_dprintf(STDERR_FILENO, "\033[0m");
-	set_shell_error(NORMAL);
-	save_terminal();
-	signal_main_init();
-	line = shell_prompt();
-	if (get_shell_error() == ERROR)
-		return (NULL);
-	if (!line)
-		exit_command_line(get_exit_status());
-	return (line);
-}
+// term.c_iflag: 27394
+// term.c_oflag: 3
+// term.c_cflag: 19200
+// term.c_lflag: 536872399
+// term.c_ispeed: 38400
+// term.c_ospeed: 38400
