@@ -1,21 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c　　　　                                     :+:      :+:    :+:   */
+/*   check_exit.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: shmorish <shmorish@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2000/01/01 00:00:00 by shmorish          #+#    #+#             */
-/*   Updated: 2000/01/01 00:00:00 by shmorish         ###   ########.fr       */
+/*   Created: 2000/00/00 00:00:00 by shmorish          #+#    #+#             */
+/*   Updated: 2000/00/00 00:00:00 by shmorish         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdbool.h>
-#include <unistd.h>
+#include "executor.h"
+#include <sys/wait.h>
 
-bool	is_interactive(void)
+void	check_exit(int status)
 {
-	return (isatty(STDIN_FILENO) \
-			&& isatty(STDOUT_FILENO) \
-			&& isatty(STDERR_FILENO));
+	if (WIFEXITED(status))
+		set_exit_status(WEXITSTATUS(status));
+	else if (WIFSIGNALED(status))
+		set_exit_status(WTERMSIG(status) + 128);
+	else
+		set_exit_status(1);
 }

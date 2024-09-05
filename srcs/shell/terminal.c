@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error_msg.c                                        :+:      :+:    :+:   */
+/*   terminal.c　 　                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: shmorish <shmorish@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,35 +10,24 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-#include <errno.h>
-#include <string.h>
+#include <termios.h>
+#include <unistd.h>
 
-#ifdef SHELL
-
-void	shell_error(void)
+void	save_terminal(void)
 {
-	ft_dprintf(STDERR_FILENO, "bash: ");
+	struct termios	term;
+
+	tcgetattr(STDIN_FILENO, &term);
+	term.c_iflag |= ICRNL;
+	term.c_oflag |= ONLCR;
+	term.c_cflag |= B19200;
+	term.c_lflag |= (PENDIN | ICANON | ECHO);
+	tcsetattr(STDIN_FILENO, TCSANOW, &term);
 }
 
-#else
-
-void	shell_error(void)
-{
-	ft_dprintf(STDERR_FILENO, "minishell: ");
-}
-
-#endif
-
-void	error_from_function(char *func_name)
-{
-	shell_error();
-	ft_dprintf(STDERR_FILENO, "%s: ", func_name);
-	ft_dprintf(STDERR_FILENO, "%s\n", strerror(errno));
-}
-
-void	error_msg(char *func_name)
-{
-	shell_error();
-	ft_dprintf(STDERR_FILENO, "%s\n", func_name);
-}
+// term.c_iflag: 27394
+// term.c_oflag: 3
+// term.c_cflag: 19200
+// term.c_lflag: 536872399
+// term.c_ispeed: 38400
+// term.c_ospeed: 38400

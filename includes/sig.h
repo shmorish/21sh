@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   shell.h                                            :+:      :+:    :+:   */
+/*   sig.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: shmorish <shmorish@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,41 +10,19 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SHELL_H
-# define SHELL_H
+#ifndef SIG_H
+# define SIG_H
 
-# include <stdbool.h>
+extern int	g_signal;
 
-# define NORMAL 0
-# define ERROR 1
-# define HISTORY_FILE ".minishell_history"
+void	signal_main_init(void);
+void	signal_child_init(void);
 
-// error_msg.c
-void			shell_error(void);
-void			error_from_function(char *func_name);
-void			error_msg(char *func_name);
+void	sig_handler_heredoc(int signum, siginfo_t *info, void *ucontext);
+void	sig_handler_heredoc_quit(int signum, siginfo_t *info, void *ucontext);
+void	sig_handler_sigint(int signum, siginfo_t *info, void *ucontext);
+void	sig_handler_sigquit(int signum, siginfo_t *info, void *ucontext);
 
-// history.c
-char			*expand_history(char *line);
-
-// prompt.c
-char			*prompt(void);
-
-// shell_expand_error.c
-void			set_shell_error(int status);
-int				get_shell_error(void);
-
-// shell_prompt.c
-char			*shell_prompt(void);
-
-// terminal.c
-void			save_terminal(void);
-// struct termios	get_terminal(void);
-
-// tilde.c
-char			*tidle(char *line);
-
-// utils.c
-bool			is_interactive(void);
+void	check_exit(int status);
 
 #endif
