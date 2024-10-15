@@ -6,7 +6,7 @@
 /*   By: tkuramot <tkuramot@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 03:15:51 by tkuramot          #+#    #+#             */
-/*   Updated: 2024/07/15 01:49:52 by kura             ###   ########.fr       */
+/*   Updated: 2024/07/22 13:54:28 by kura             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,55 +15,6 @@
 
 # include "ft_dlist.h"
 # include <stdbool.h>
-
-typedef enum e_type
-{
-	EMPTY,
-	STRING,
-	PIPE,
-	SEMICOLON,
-	DOUBLE_SEMICOLON,
-	PIPE_AND,
-	AND,
-	OR,
-	TILDE,
-	DOLLAR,
-	EXPAND_STRING,
-	LEFT_PAREN,
-	RIGHT_PAREN,
-	LEFT_PAREN_PAREN,
-	RIGHT_PAREN_PAREN,
-	PLUS,
-	MINUS,
-	MULTIPLY,
-	SLASH,
-	PERCENT,
-	DOUBLE_STAR,
-	LEFT_BRACE,
-	RIGHT_BRACE,
-	SHARP,
-	DOUBLE_DOT,
-	ASTERISK,
-	QUESTION,
-	DOUBLE_QUESTION,
-	LEFT_BRACKET,
-	RIGHT_BRACKET,
-	INPUT_REDIR,
-	OUTPUT_REDIR,
-	APPEND_REDIR,
-	HEREDOC,
-	NUMBER_REDIR_BEFORE,
-	NUMBER_REDIR_AFTER,
-	AMPERSAND,
-	INPUT_AND,
-	OUTPUT_AND,
-	INPUT_OUTPUT,
-	FILENAME,
-	HEREDOC_WORD,
-	HEREDOC_WORD_QUOTE,
-	HISTORY,
-	HISTORY_NUM,
-}					t_type;
 
 typedef enum e_token_type
 {
