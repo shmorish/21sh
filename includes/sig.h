@@ -17,6 +17,7 @@ extern int	g_signal;
 
 void	signal_main_init(void);
 void	signal_child_init(void);
+void	signal_parent_init(void);
 
 void	sig_handler_heredoc(int signum, siginfo_t *info, void *ucontext);
 void	sig_handler_heredoc_quit(int signum, siginfo_t *info, void *ucontext);

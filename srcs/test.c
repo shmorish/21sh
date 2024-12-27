@@ -40,4 +40,10 @@ void	test_function(char *line, char **envp)
 		print_env_export();
 	if (ft_memcmp(line, "top", 4) == 0)
 		test_other_command("/usr/bin/top", envp);
+	if (ft_memcmp(line, "ls", 3) == 0)
+		test_other_command("/bin/ls", envp);
+	if (ft_memcmp(line, "ps", 3) == 0)
+		test_other_command("/bin/ps", envp);
+	if (ft_memcmp(line, "clear", 6) == 0)
+		test_other_command("/usr/bin/clear", envp);
 }
