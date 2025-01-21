@@ -13,6 +13,8 @@
 #ifndef SIG_H
 # define SIG_H
 
+# include <signal.h>
+
 extern int	g_signal;
 
 void	signal_main_init(void);
