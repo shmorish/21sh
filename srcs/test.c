@@ -13,6 +13,7 @@
 #include "test.h"
 #include "libft.h"
 #include "sig.h"
+#include <sys/wait.h>
 
 static void	test_other_command(char *command, char **envp)
 {
