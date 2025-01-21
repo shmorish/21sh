@@ -14,17 +14,18 @@
 #include "libft.h"
 #include "sig.h"
 
-static void	test_other_command(char *command, char **envp)
+static void	test_other_command(char **command, char **envp)
 {
 	pid_t		pid;
-	char const	*argv[] = {command, NULL};
+	// char const	*argv[] = {command, NULL};
 	int			status;
 
 	pid = fork();
 	if (pid == 0)
 	{
 		signal_child_init();
-		execve(argv[0], (char *const *)argv, envp);
+		// execve(argv[0], (char *const *)argv, envp);
+		execve(command[0], command, envp);
 		perror("execve");
 		exit(1);
 	}
@@ -39,11 +40,22 @@ void	test_function(char *line, char **envp)
 	if (ft_memcmp(line, "export", 7) == 0)
 		print_env_export();
 	if (ft_memcmp(line, "top", 4) == 0)
-		test_other_command("/usr/bin/top", envp);
+	{
+		char *argv[] = {"/usr/bin/top", NULL};
+		test_other_command(argv, envp);
+	}
 	if (ft_memcmp(line, "ls", 3) == 0)
-		test_other_command("/bin/ls", envp);
-	if (ft_memcmp(line, "ps", 3) == 0)
-		test_other_command("/bin/ps", envp);
-	if (ft_memcmp(line, "clear", 6) == 0)
-		test_other_command("/usr/bin/clear", envp);
+	{
+		char *argv[] = {"/bin/ls", NULL};
+		test_other_command(argv, envp);
+	}
+	if (ft_memcmp(line, "ls -la", 6) == 0)
+	{
+		char *argv[] = {"/bin/ls", "-la", NULL};
+		test_other_command(argv, envp);
+	}
+	// if (ft_memcmp(line, "ps", 3) == 0)
+	// 	test_other_command("/bin/ps", envp);
+	// if (ft_memcmp(line, "clear", 6) == 0)
+	// 	test_other_command("/usr/bin/clear", envp);
 }
