@@ -11,134 +11,69 @@
 /* ************************************************************************** */
 
 #ifndef PARSER_H
-# define PARSER_H
+#define PARSER_H
 
-# include "lexer.h"
+#include "lexer.h"
 
-typedef enum {
-    NODE_DIGIT,
-    NODE_NUMBER,
-    NODE_WORD,
-    NODE_REDIRECTION,
-    NODE_SIMPLE_COMMAND_ELEMENT,
-    NODE_REDIRECTION_LIST,
-    NODE_SIMPLE_COMMAND,
-    NODE_SUBSHELL,
-    NODE_GROUP_COMMAND,
-    NODE_SHELL_COMMAND,
-    NODE_COMMAND,
-    NODE_COMPOUND_LIST,
-    NODE_LIST,
-    NODE_PIPELINE,
-    NODE_SIMPLE_LIST
-} NodeType;
+typedef struct simple_cmd_element {
+  char *word;
+  int number;
+  struct redirection *redirection;
+} t_simple_cmd_element;
 
-typedef struct ASTNode {
-    NodeType type;
-} ASTNode;
+typedef struct redirection {
+  char *operator;  // ">", "<", ">>", "<<", etc.
+  char *filename;
+  int fd;
+  struct redirection *next;
+} t_redirection;
 
-typedef struct {
-    ASTNode base;
-	char *word;
-} Word;
+typedef struct simple_cmd {
+  t_simple_cmd_element *elements;
+  int element_count;
+} t_simple_cmd;
 
-typedef struct {
-    ASTNode base;
-    char* direction;
-    int number;
-    Word* file;
-} Redirection;
+typedef struct pipeline {
+  t_simple_cmd *cmds;
+  int cmd_count;
+} t_pipeline;
 
-typedef struct {
-    ASTNode base;
-    union {
-        Word* word;
-        Redirection* redirection;
-    } element;
-} SimpleCommandElement;
+typedef struct list {
+  t_pipeline *pipelines;
+  int pipeline_count;
+  char *separator;  // "&&", "||", ";"
+} t_list;
 
-typedef struct {
-    ASTNode base;
-    Redirection** redirections;
-    int redirection_count;
-} RedirectionList;
+typedef struct subshell {
+  t_list *compound_list;
+} t_subshell;
 
-typedef struct {
-    ASTNode base;
-    SimpleCommandElement** elements;
-    int element_count;
-} SimpleCommand;
+typedef struct group_cmd {
+  t_list *list;
+} t_group_cmd;
 
-struct CompoundList;
+typedef struct cmd {
+  t_simple_cmd *simple_cmd;
+  t_subshell *subshell;
+  t_group_cmd *group_cmd;
+  t_redirection *redirections;
+} t_cmd;
 
-typedef struct {
-    ASTNode base;
-    struct CompoundList* compound_list;
-} SubShell;
+typedef struct shell_cmd {
+  t_cmd *cmd;
+} t_shell_cmd;
 
-struct List;
+t_cmd *parse_cmd(t_token *cmd);
+t_simple_cmd *parse_simple_cmd(t_token *cmd);
+t_redirection *parse_redirection(t_token *cmd);
+t_pipeline *parse_pipeline(t_token *cmd);
+t_list *parse_list(t_token *cmd);
+t_subshell *parse_subshell(t_token *cmd);
+t_group_cmd *parse_group_cmd(t_token *cmd);
 
-typedef struct {
-    ASTNode base;
-    struct List* list_node;
-} GroupCommand;
-
-typedef struct {
-    ASTNode base;
-    union {
-        SubShell* subshell;
-        GroupCommand* group_command;
-    } command;
-} ShellCommand;
-
-typedef struct {
-    ASTNode base;
-    union {
-		// char** にして execve にそのまま渡せるようにしたい
-		// redirection は redirection_listとして別途管理する
-        SimpleCommand* simple_command;
-        ShellCommand* shell_command;
-    } command;
-    RedirectionList* redirection_list;
-} Command;
-
-typedef struct CompoundList {
-    ASTNode base;
-    struct List* list_node;
-} CompoundList;
-
-typedef struct List {
-    ASTNode base;
-    union {
-        struct List* list;
-        struct Pipeline* pipeline;
-    } element;
-    char* operator;
-    struct List* next;
-} List;
-
-typedef struct Pipeline {
-    ASTNode base;
-    Command** commands;
-    int command_count;
-} Pipeline;
-
-// 一番上位
-typedef struct SimpleList {
-    ASTNode base;
-    union {
-        struct SimpleList* simple_list;
-        Pipeline* pipeline;
-    } element;
-    char* operator;
-    struct SimpleList* next;
-    int terminated;
-} SimpleList;
-
-bool				consume_reserved(char *r);
-bool				consume_type(t_token_type t);
-
-bool				expect_reserved(char *r);
-bool				expect_type(t_token_type t);
+bool consume_reserved(char *r);
+bool consume_type(t_token_type t);
+bool expect_reserved(char *r);
+bool expect_type(t_token_type t);
 
 #endif
