@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error_msg.c                                        :+:      :+:    :+:   */
+/*   test.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: shmorish <shmorish@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,35 +10,18 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-#include <errno.h>
-#include <string.h>
+#ifndef TEST_H
+# define TEST_H
 
-#ifdef SHELL
+# include "env.h"
+# include "executor.h"
+# include "lexer.h"
+# include "shell.h"
+# include <errno.h>
+# include <stdio.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 
-void	shell_error(void)
-{
-	ft_dprintf(STDERR_FILENO, "bash: ");
-}
-
-#else
-
-void	shell_error(void)
-{
-	ft_dprintf(STDERR_FILENO, "minishell: ");
-}
+void	test_function(char *line, char **envp);
 
 #endif
-
-void	error_from_function(char *func_name)
-{
-	shell_error();
-	ft_dprintf(STDERR_FILENO, "%s: ", func_name);
-	ft_dprintf(STDERR_FILENO, "%s\n", strerror(errno));
-}
-
-void	error_msg(char *func_name)
-{
-	shell_error();
-	ft_dprintf(STDERR_FILENO, "%s\n", func_name);
-}

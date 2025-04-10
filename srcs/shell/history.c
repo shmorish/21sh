@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error_msg.c                                        :+:      :+:    :+:   */
+/*   history.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: shmorish <shmorish@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,35 +10,31 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "shell.h"
 #include "libft.h"
-#include <errno.h>
-#include <string.h>
+#include <stdio.h>
+#include <readline/history.h>
 
-#ifdef SHELL
-
-void	shell_error(void)
+char	*expand_history(char *line)
 {
-	ft_dprintf(STDERR_FILENO, "bash: ");
-}
+	char	*expanded_line;
+	int		ret;
 
-#else
-
-void	shell_error(void)
-{
-	ft_dprintf(STDERR_FILENO, "minishell: ");
-}
-
-#endif
-
-void	error_from_function(char *func_name)
-{
-	shell_error();
-	ft_dprintf(STDERR_FILENO, "%s: ", func_name);
-	ft_dprintf(STDERR_FILENO, "%s\n", strerror(errno));
-}
-
-void	error_msg(char *func_name)
-{
-	shell_error();
-	ft_dprintf(STDERR_FILENO, "%s\n", func_name);
+	expanded_line = NULL;
+	ret = history_expand(line, &expanded_line);
+	if (ret == -1)
+	{
+		shell_error();
+		ft_dprintf(STDERR_FILENO, "%s\n", expanded_line);
+		free(expanded_line);
+		free(line);
+		expanded_line = NULL;
+		line = NULL;
+		set_shell_error(ERROR);
+		return (NULL);
+	}
+	if (ret == 1)
+		ft_printf("%s\n", expanded_line);
+	free(line);
+	return (expanded_line);
 }

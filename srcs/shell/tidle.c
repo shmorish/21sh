@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error_msg.c                                        :+:      :+:    :+:   */
+/*   history.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: shmorish <shmorish@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -11,34 +11,19 @@
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <errno.h>
-#include <string.h>
+#include <stdio.h>
+#include <readline/readline.h>
 
-#ifdef SHELL
-
-void	shell_error(void)
+char	*tidle(char *line)
 {
-	ft_dprintf(STDERR_FILENO, "bash: ");
-}
+	char	*trm;
+	char	*expand_rslt;
 
-#else
-
-void	shell_error(void)
-{
-	ft_dprintf(STDERR_FILENO, "minishell: ");
-}
-
-#endif
-
-void	error_from_function(char *func_name)
-{
-	shell_error();
-	ft_dprintf(STDERR_FILENO, "%s: ", func_name);
-	ft_dprintf(STDERR_FILENO, "%s\n", strerror(errno));
-}
-
-void	error_msg(char *func_name)
-{
-	shell_error();
-	ft_dprintf(STDERR_FILENO, "%s\n", func_name);
+	trm = ft_strtrim(line, " \t");
+	expand_rslt = tilde_expand(trm);
+	free(trm);
+	trm = NULL;
+	free(line);
+	line = NULL;
+	return (expand_rslt);
 }

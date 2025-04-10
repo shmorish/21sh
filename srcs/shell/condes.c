@@ -1,41 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   prompt.c                                           :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: shmorish <shmorish@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2000/01/01 00:00:00 by shmorish          #+#    #+#             */
-/*   Updated: 2000/01/01 00:00:00 by shmorish         ###   ########.fr       */
+/*   Created: 2024/04/30 03:10:48 by shmorish          #+#    #+#             */
+/*   Updated: 2024/07/15 20:59:03 by shmorish         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "env.h"
 #include "executor.h"
 #include "shell.h"
-#include "libft.h"
-#include "sig.h"
-#include <stdlib.h>
+#include <errno.h>
+#include <stdio.h>
+#include <readline/readline.h>
+#include <readline/history.h>
+#include <fcntl.h>
+extern int	g_signal;
 
-static void	exit_command_line(int exit_status)
+__attribute__((constructor)) static void	constructor(void)
 {
+	set_proccess_id(ft_getpid());
+	set_exit_status(0);
+	rl_instream = stdin;
+	rl_outstream = stderr;
+	using_history();
 	if (is_interactive())
-		write(STDERR_FILENO, "exit\n", 6);
-	exit(exit_status);
+		read_history(HISTORY_FILE);
+	errno = 0;
+	g_signal = 0;
 }
 
-char	*prompt(void)
+__attribute__((destructor)) static void	destructor(void)
 {
-	char	*line;
-
-	ft_dprintf(STDERR_FILENO, "\033[0m");
-	set_shell_error(NORMAL);
-	save_terminal();
-	signal_main_init();
-	line = shell_prompt();
-	if (get_shell_error() == ERROR)
-		return (NULL);
-	if (!line)
-		exit_command_line(get_exit_status());
-	return (line);
+	free_all_env();
+	write_history(HISTORY_FILE);
+	clear_history();
 }

@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "env.h"
+#include "libft.h"
 
 // export key=value
 // export key

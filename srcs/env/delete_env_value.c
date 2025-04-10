@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "env.h"
+#include <stdlib.h>
 
 static void	free_env(t_env *env)
 {

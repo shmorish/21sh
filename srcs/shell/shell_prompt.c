@@ -12,6 +12,7 @@
 
 #include "env.h"
 #include "shell.h"
+#include "libft.h"
 #include <fcntl.h>
 #include <stdio.h>
 #include <readline/history.h>
@@ -25,7 +26,8 @@ static char	*interactive_prompt(void)
 	ps1 = get_env_value("PS1");
 	line = readline(ps1);
 	free(ps1);
-	add_history(line);
+	if (!line)
+		return (NULL);
 	return (line);
 }
 
@@ -43,10 +45,18 @@ static char	*non_interactive_prompt(void)
 	return (line);
 }
 
+static void	history_append(char *line)
+{
+	if (is_interactive())
+	{
+		if (ft_strlen(line) != 0)
+			add_history(line);
+	}
+}
+
 char	*shell_prompt(void)
 {
 	char	*line;
-	char	*trm;
 	char	*expand_rslt;
 
 	if (is_interactive())
@@ -55,10 +65,11 @@ char	*shell_prompt(void)
 		line = non_interactive_prompt();
 	if (!line)
 		return (NULL);
-	trm = ft_strtrim(line, " \t");
-	free(line);
-	expand_rslt = tilde_expand(trm);
-	free(trm);
-	line = expand_rslt;
-	return (line);
+	line = expand_history(line);
+	if (!line)
+		return (NULL);
+	if (is_interactive())
+		history_append(line);
+	expand_rslt = tidle(line);
+	return (expand_rslt);
 }

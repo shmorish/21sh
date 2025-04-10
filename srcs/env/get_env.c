@@ -13,6 +13,7 @@
 #include "env.h"
 #include "utils.h"
 #include "executor.h"
+#include "libft.h"
 
 char	*get_env_value(char *key)
 {

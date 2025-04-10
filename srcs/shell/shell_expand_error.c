@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error_msg.c                                        :+:      :+:    :+:   */
+/*   shell_expand_error.c.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: shmorish <shmorish@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,35 +10,25 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-#include <errno.h>
-#include <string.h>
+#include <stdbool.h>
 
-#ifdef SHELL
-
-void	shell_error(void)
+static int	shell_error_helper(int status, bool set)
 {
-	ft_dprintf(STDERR_FILENO, "bash: ");
+	static int	shell_error = 0;
+
+	if (set)
+		shell_error = status;
+	return (shell_error);
 }
 
-#else
-
-void	shell_error(void)
+void	set_shell_error(int status)
 {
-	ft_dprintf(STDERR_FILENO, "minishell: ");
+	const int	new_status = status;
+
+	shell_error_helper(new_status, true);
 }
 
-#endif
-
-void	error_from_function(char *func_name)
+int	get_shell_error(void)
 {
-	shell_error();
-	ft_dprintf(STDERR_FILENO, "%s: ", func_name);
-	ft_dprintf(STDERR_FILENO, "%s\n", strerror(errno));
-}
-
-void	error_msg(char *func_name)
-{
-	shell_error();
-	ft_dprintf(STDERR_FILENO, "%s\n", func_name);
+	return (shell_error_helper(0, false));
 }

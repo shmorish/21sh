@@ -14,8 +14,14 @@
 #include "executor.h"
 #include "lexer.h"
 #include "shell.h"
+#include "test.h"
+#include <errno.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <readline/readline.h>
+#include <readline/history.h>
+
+int	g_signal;
 
 void	cleanup(char *line)
 {
@@ -23,31 +29,21 @@ void	cleanup(char *line)
 	free(line);
 }
 
-void	test_function(char *line)
-{
-	if (ft_memcmp(line, "env", 4) == 0)
-		print_env();
-	if (ft_memcmp(line, "export", 7) == 0)
-		print_env_export();
-}
-
 int	main(int argc, char **argv, char **envp)
 {
 	char		*line;
 
 	(void)argc, (void)argv;
-	set_proccess_id(ft_getpid());
-	rl_instream = stdin;
-	rl_outstream = stderr;
 	env_init(envp);
 	while (1)
 	{
 		line = prompt();
-		test_function(line);
+		if (get_shell_error() == ERROR)
+			continue ;
+		test_function(line, envp);
 		set_token_list(tokenize(line));
-		cleanup(line);
 		lx_debug(get_token_list());
+		cleanup(line);
 	}
-	free_all_env();
 	return (0);
 }

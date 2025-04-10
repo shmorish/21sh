@@ -12,6 +12,8 @@
 
 #include "env.h"
 #include <fcntl.h>
+#include <sys/wait.h>
+#include <stdlib.h>
 
 #ifdef __linux__
 

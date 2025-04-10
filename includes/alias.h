@@ -1,21 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c　　　　                                     :+:      :+:    :+:   */
+/*   alias.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shmorish <shmorish@student.42tokyo.jp>     +#+  +:+       +#+        */
+/*   By: mori <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2000/01/01 00:00:00 by shmorish          #+#    #+#             */
-/*   Updated: 2000/01/01 00:00:00 by shmorish         ###   ########.fr       */
+/*   Created: 2024/07/12 20:17:07 by mori              #+#    #+#             */
+/*   Updated: 2024/07/13 03:00:19 by mori             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdbool.h>
-#include <unistd.h>
+#ifndef ALIAS_H
+# define ALIAS_H
 
-bool	is_interactive(void)
-{
-	return (isatty(STDIN_FILENO) \
-			&& isatty(STDOUT_FILENO) \
-			&& isatty(STDERR_FILENO));
-}
+#endif
