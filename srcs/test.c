@@ -39,6 +39,10 @@ void	test_function(char *line, char **envp)
 		print_env();
 	if (ft_memcmp(line, "export", 7) == 0)
 		print_env_export();
+	if (ft_memcmp(line, "alias", 6) == 0)
+		print_alias();
+	if (ft_memcmp(line, "alias ll='ls -l'", 20) == 0)
+		set_alias("ll", "ls -l");
 	if (ft_memcmp(line, "top", 4) == 0)
 		test_other_command("/usr/bin/top", envp);
 	if (ft_memcmp(line, "ls", 3) == 0)
